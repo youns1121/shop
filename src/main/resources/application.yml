@@ -1,0 +1,79 @@
+server:
+  port: 8080
+  servlet:
+
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/shop?characterEncoding=UTF-8 #&useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: wjdqhqhdks
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update # create : 기존 테이블 드랍후 새로 생성
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false #true라면 JPA가 사용하는 기본 넘버링 전략으로 사용됨
+    #    show-sql: true # 테이블 생성 정보가 console상에 출력됨
+    properties:
+      hibernate:
+        format_sql: true # sql이 한줄 출력이 아닌 정렬됨
+#        show_sql: true
+
+
+logging.level:
+  org.hibernate.SQL: debug
+
+---
+
+server:
+  port: 8081
+  servlet:
+
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+
+spring:
+#  config:
+#    activate:
+#      on-profile: test
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test  #jdbc:h2:tcp://localhost/~/shop #jdbc:h2:~/shop : 최소 한번 #jdbc:h2:mem:test
+    username: sa
+    password:
+
+
+  jpa:
+    database-platform=org:
+      hibernate:
+        dialect: H2Dialect
+    open-in-view: true
+    hibernate:
+      ddl-auto: update # create : 기존 테이블 드랍후 새로 생성
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false #true라면 JPA가 사용하는 기본 넘버링 전략으로 사용됨
+    #    show-sql: true # 테이블 생성 정보가 console상에 출력됨
+    properties:
+      hibernate:
+        format_sql: true # sql이 한줄 출력이 아닌 정렬됨
+logging.level:
+  org.hibernate.SQL: debug
+
