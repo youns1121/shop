@@ -42,10 +42,10 @@ class ShopApplicationTests {
         for(int i=0; i<=10; i++) {
             Item item = new Item();
             item.setItemNm("테스트상품");
-            item.setPrice(5000);
+            item.setPrice(5000+i);
             item.setItemDetail("테스트상세설명");
             item.setItemSellStatus(ItemSellStatus.SELL);
-            item.setStockNumber(100);
+            item.setStockNumber(100+i);
             item.setCreateTime(LocalDateTime.now());
             item.setModifiTime(LocalDateTime.now());
             item.setDelYn("N");
@@ -97,6 +97,27 @@ class ShopApplicationTests {
             System.out.println(item.toString());
         }
     }
+
+    @Test
+    @DisplayName("@Query를 이용한 상품 조회 테스트")
+    public void findByItemDetailTest(){
+        this.createItemListTest();
+        List<Item> itemList = itemRepository.findByItemDetail("테스트 상품 상세 설명");
+        for (Item item: itemList) {
+            System.out.println(item.toString());
+        }
+    }
+
+    @Test
+    @DisplayName("@Query를 이용한 Native query 상품 조회 테스트")
+    public void findByItemDetailByNativeTest(){
+        this.createItemListTest();
+        List<Item> itemList = itemRepository.findByItemDetailByNative("테스트 상품 상세 설명");
+        for (Item item: itemList) {
+            System.out.println(item.toString());
+        }
+    }
+
 
 
 
