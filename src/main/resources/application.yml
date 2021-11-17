@@ -55,7 +55,7 @@ spring:
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/shop  #jdbc:h2:tcp://localhost/~/shop #jdbc:h2:~/shop : 최소 한번 #jdbc:h2:mem:test
+    url: jdbc:h2:mem:test  #jdbc:h2:tcp://localhost/~/shop #jdbc:h2:~/shop : 최소 한번 #jdbc:h2:mem:test
     username: sa
     password:
 
@@ -74,6 +74,6 @@ spring:
     properties:
       hibernate:
         format_sql: true # sql이 한줄 출력이 아닌 정렬됨
-logging.level:
-  org.hibernate.SQL: debug
+#logging.level:
+#  org.hibernate.SQL: debug
 
