@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html xmlns:th="html://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"><!--html 태그에 layout 네임스페이스를 추가-->
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <th:block layout:fragment="script"></th:block>
+    <th:block layout:fragment="css"></th:block>
+
+</head>
+<body>
+
+    <div th:replace="fragments/header::header"></div> <!-- fragments 폴더 아래의 header.html 파일의 th:fragment=header 영역을 가져옴-->
+
+    <div layout:fragment="content"> <!--layout에서 변경되는 영역을 fragment로 설정-->
+
+    </div>
+
+    <div th:replace="fragments/footer::footer"></div> <!-- fragments 폴더 아래의 footer.html 파일의 th:fragment="footer" 영역을 가져옴-->
+
+</body>
+</html>
