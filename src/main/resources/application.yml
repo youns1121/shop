@@ -12,6 +12,13 @@ spring:
     activate:
       on-profile: local
 
+  devtools: #Live Reload 기능 활성화화
+   livereload:
+      enabled: true
+
+  thymeleaf: #Thymeleaf cache 사용중지, 개발환경에서는 캐싱기능을 off
+    cache: false
+
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -38,20 +45,12 @@ logging.level:
 
 ---
 
-server:
-  port: 8081
-  servlet:
-
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
 
 
 spring:
-#  config:
-#    activate:
-#      on-profile: test
+  config:
+    activate:
+      on-profile: test
 
   datasource:
     driver-class-name: org.h2.Driver
@@ -74,6 +73,6 @@ spring:
     properties:
       hibernate:
         format_sql: true # sql이 한줄 출력이 아닌 정렬됨
-#logging.level:
-#  org.hibernate.SQL: debug
+logging.level:
+  org.hibernate.SQL: debug
 
