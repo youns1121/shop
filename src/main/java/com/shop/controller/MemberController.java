@@ -48,14 +48,17 @@ public class MemberController {
     }
 
 
+    @GetMapping(value = "/login") // 로그인
+    public String loginMember(){
+        return "/member/memberLoginForm";
 
-/*    @PostMapping(value = "/new")
-    public String memberForm(MemberDto memberDto){
+    }
 
-        Member member = Member.createMember(memberDto, passwordEncoder);
-        memberService.saveMember(member);
+    @GetMapping(value = "/login/error") //로그인 실패
+    public String loginError(Model model){
+        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
+        return "/member/memberLoginForm";
+    }
 
-        return "redirect:/"; //로그인 후 home 으로 이동
-    }*/
 }
 
