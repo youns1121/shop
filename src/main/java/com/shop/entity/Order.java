@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,6 +24,9 @@ public class Order extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="memeber_id")
     private Member member;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItemList = new ArrayList<>();
 
     @Column(name = "order_date")
     private LocalDateTime orderDate; //주문일
