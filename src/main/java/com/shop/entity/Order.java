@@ -25,7 +25,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name="memeber_id")
     private Member member;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) // 부모 엔티티의 영속성 상태 변화를 자식 엔티티에 모두 전이
     private List<OrderItem> orderItemList = new ArrayList<>();
 
     @Column(name = "order_date")
