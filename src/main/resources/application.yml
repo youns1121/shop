@@ -1,16 +1,30 @@
+#그룹화
+spting:
+  profiles:
+    group:
+      "local": "local,common"
+      "test": "test,common"
+
+---
+#공통설정
+spring:
+  config:
+    activate:
+      on-profile: "common"
+
 server:
   port: 8080
   servlet:
-
     encoding:
       charset: UTF-8
       enabled: true
       force: true
-
+---
+#local
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: "local"
 
   devtools: #Live Reload 기능 활성화화
    livereload:
@@ -37,20 +51,20 @@ spring:
     properties:
       hibernate:
         format_sql: true # sql이 한줄 출력이 아닌 정렬됨
-#        show_sql: true
+
 
 
 logging.level:
   org.hibernate.SQL: debug
 
 ---
-
+#test
 
 
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: "test"
 
   datasource:
     driver-class-name: org.h2.Driver
@@ -69,10 +83,12 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false #true라면 JPA가 사용하는 기본 넘버링 전략으로 사용됨
-    #    show-sql: true # 테이블 생성 정보가 console상에 출력됨
+
     properties:
       hibernate:
         format_sql: true # sql이 한줄 출력이 아닌 정렬됨
+
 logging.level:
   org.hibernate.SQL: debug
+
 
