@@ -1,6 +1,7 @@
 package com.shop.entity;
 
 import com.shop.dto.MemberFormDto;
+import com.shop.entity.comm.BaseEntity;
 import com.shop.enums.MemberRole;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,25 +15,26 @@ import javax.persistence.*;
 @Setter
 @Table(name="member")
 @Entity
-public class Member {
+public class Member extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name ="member_id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name="email", nullable = false, unique = true)
+    @Column(name="email", unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "address")
     private String address;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "member_role")
     private MemberRole memberRole;
 
 
@@ -47,7 +49,7 @@ public class Member {
 
         String password = passwordEncoder.encode(memberFormDto.getPassword());
         member.setPassword(password);
-        member.setMemberRole(MemberRole.USER);
+        member.setMemberRole(MemberRole.ADMIN);
 
         return member;
     }
