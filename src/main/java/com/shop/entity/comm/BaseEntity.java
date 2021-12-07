@@ -2,6 +2,7 @@ package com.shop.entity.comm;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,20 +13,18 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @MappedSuperclass
 @EntityListeners({AuditingEntityListener.class}) //해당 클래스에 Auditing 기능을 포함
-public class BaseEntity {
+public abstract class BaseEntity extends BaseTimeEntity{
 
-    @CreatedDate // Entity가 생성되어 저장될 때 시간이 자동 저장
-    @Column(name="create_time", nullable = false)
-    private LocalDateTime createTime; //생성시간
+    @CreatedBy
+    @Column(updatable = false)
+    String createdBy;
 
-    @LastModifiedDate // 조회한 Entity의 값을 변경할 때 시간이 자동 저장
-    @Column(name="update_time", nullable = false)
-    private LocalDateTime updateTime;  //수정시간
+    @LastModifiedDate
+    private String modifiedBy;
 
-    @Column(name="del_yn", nullable = false, columnDefinition = "VARCHAR(1) DEFAULT 'N'")
+    @Column(name="del_yn"/*, nullable = false*/, columnDefinition = "VARCHAR(1) DEFAULT 'N'")
     private String delYn; //삭제여부
 
 
