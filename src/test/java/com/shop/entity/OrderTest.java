@@ -3,6 +3,7 @@ package com.shop.entity;
 import com.shop.enums.ItemSellStatus;
 import com.shop.repository.ItemRepository;
 import com.shop.repository.MemberRepository;
+import com.shop.repository.OrderItemRepository;
 import com.shop.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,9 @@ class OrderTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @Autowired
+    OrderItemRepository orderItemRepository;
+
     @PersistenceContext
     EntityManager em;
 
@@ -41,9 +45,7 @@ class OrderTest {
         item.setItemDetail("상세설명");
         item.setItemSellStatus(ItemSellStatus.SELL); // 제품 판매상태
         item.setStockNumber(100); // 재고수량
-        item.setDelYn("N");
-        item.setCreateTime(LocalDateTime.now()); //등록시간
-        item.setUpdateTime(LocalDateTime.now()); //수정시간
+
 
         return item;
     }
@@ -59,7 +61,6 @@ class OrderTest {
             orderItem.setCount(10); //수량
             orderItem.setOrderPrice(1000); //주문가격
             orderItem.setOrder(order);
-            orderItem.setDelYn("N");
             order.getOrderItemList().add(orderItem);
         }
         Member member = new Member();
@@ -83,7 +84,6 @@ class OrderTest {
             orderItem.setItem(item); // orderItem item 객체 set
             orderItem.setCount(10); // 수량
             orderItem.setOrderPrice(1000); //주문가격
-            orderItem.setDelYn("N"); //
             orderItem.setOrder(order);
             order.getOrderItemList().add(orderItem); // 영속성 컨텍스트에 저장되지 않은 orderITem 엔티티를 order 엔티티에 담아줌
         }
@@ -105,6 +105,24 @@ class OrderTest {
         em.flush();
     }
 
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    public void lazyLodingTest(){
+
+        Order order = this.createOrder();
+        Long orderItemId = order.getOrderItemList().get(0).getId();
+        em.flush();
+        em.clear();
+
+        OrderItem orderItem = orderItemRepository.findById(orderItemId) // 영속성 컨텍스트를 초기화 후 order 엔티티에 저장했던 주문 상품 아이디를 이용하여 orderItem을 DB에서 다시 조회
+                .orElseThrow(EntityNotFoundException::new);
+        System.out.println("Order class : " + orderItem.getOrder().getClass()); // orderItem 엔티티에 있는 order 객체의 클래스를 출력
+        System.out.println("=============================");
+        orderItem.getOrder().getOrderDate();
+        System.out.println("=============================");
+
+
+    }
 
 
 
