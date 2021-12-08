@@ -22,9 +22,16 @@ server:
 ---
 #local
 spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB #파일 한 개당 최대 사이즈
+      max-request-size: 100MB # 요청당 최대 파일 크기
   config:
     activate:
       on-profile: "local"
+
+itemImgLocation= C:/Users/minys/Spring/shop/item #상품 이미지 업로드 경로
+uploadPath=file:///C:/Users/minys/Spring/shop/ #리소스 업로드 경로
 
   devtools: #Live Reload 기능 활성화화
    livereload:
@@ -79,7 +86,7 @@ spring:
         dialect: H2Dialect
     open-in-view: true
     hibernate:
-      ddl-auto: update # create : 기존 테이블 드랍후 새로 생성
+      ddl-auto: create # create : 기존 테이블 드랍후 새로 생성
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false #true라면 JPA가 사용하는 기본 넘버링 전략으로 사용됨
