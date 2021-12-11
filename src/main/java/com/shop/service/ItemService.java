@@ -1,5 +1,6 @@
 package com.shop.service;
 
+import com.shop.dto.ItemImgDto;
 import com.shop.dto.form.ItemFormDto;
 import com.shop.entity.Item;
 import com.shop.entity.ItemImg;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,5 +43,28 @@ public class ItemService {
             itemImgService.saveItemImg(itemImg, itemImgFileList.get(i)); // 상품의 이미지 정보를 저장
         }
         return item.getId();
+    }
+
+    @Transactional(readOnly = true) // 상품 데이터를 읽어오는 트랜잭션을 읽기 전용 설정, jpa가 변경감지(더티체킹)을 수행하지 않아서 성능을 향상 시킬 수 있음
+    public ItemFormDto getItemdtl(Long itemId){
+
+        List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId); // 해당 상품의 이미지를 등록 아이디 순으로 조회
+
+        List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+        for(ItemImg itemImg : itemImgList){ // 조회한 Itemimg 엔티티를 ItemImgDto객체로 만들어서 리스트에 추가
+            ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
+            itemImgDtoList.add(itemImgDto);
+        }
+
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new); // 상품의 아이디를 통해 상품 엔티티를 조회합니다.
+        ItemFormDto itemFormDto = ItemFormDto.of(item);
+        itemFormDto.setItemImgDtoList(itemImgDtoList);
+
+        return itemFormDto;
+
+
+
+
     }
 }
