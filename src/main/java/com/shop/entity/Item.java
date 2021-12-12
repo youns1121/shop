@@ -1,13 +1,13 @@
 package com.shop.entity;
 
 
+import com.shop.dto.form.ItemFormDto;
 import com.shop.entity.comm.BaseEntity;
 import com.shop.enums.ItemSellStatus;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+
 
 @ToString
 @Setter
@@ -38,5 +38,14 @@ public class Item extends BaseEntity { /*상품*/
     private ItemSellStatus itemSellStatus; //상품 판매상태
 
 
+
+    public void updateItem(ItemFormDto itemFormDto){
+
+        this.itemNm = itemFormDto.getItemNm();
+        this.price = itemFormDto.getPrice();
+        this.stockNumber = itemFormDto.getPrice();
+        this.itemDetail = itemFormDto.getItemDetail();
+        this.itemSellStatus = itemFormDto.getItemSellStatus();
+    }
 
 }
