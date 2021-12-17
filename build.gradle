@@ -70,6 +70,14 @@ compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
 
+/** * comileQuerydsl 추가 */
+compileQuerydsl {
+    if(file(querydslDir).exists() )
+        delete(file(querydslDir))
+}
+
+
+
 
 test {
     useJUnitPlatform()
