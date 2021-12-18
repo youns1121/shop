@@ -16,12 +16,12 @@
 
         function page(page){
             var searchDateType = $("#searchDateType").val();
-            var searchSellStatus = $("#searchSellStatus").val();
+            var itemSellStatus = $("#itemSellStatus").val();
             var searchBy = $("#searchBy").val();
             var searchQuery = $("#searchQuery").val();
 
             location.href="/admin/items/" + page + "?searchDateType=" + searchDateType
-                + "&searchSellStatus=" + searchSellStatus
+                + "&itemSellStatus=" + itemSellStatus
                 + "&searchBy=" + searchBy
                 + "&searchQuery=" + searchQuery;
         }
@@ -40,6 +40,7 @@
 
 <div layout:fragment="content">
 
+    <!--/*@thymesVar id="number" type=""*/-->
     <form th:action="@{'/admin/items/' + ${items.number}}" role="form" method="get" th:object="${items}">
         <table class="table">
             <thead>
@@ -57,7 +58,7 @@
                 <td>
                     <a th:href="'/admin/item/'+${item.id}" th:text="${item.itemNm}"></a>
                 </td>
-                <td th:text="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
+                <td th:text="${item.itemSellStatus == T(com.shop.enums.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
                 <td th:text="${item.createdBy}"></td>
                 <td th:text="${item.regTime}"></td>
             </tr>
@@ -94,7 +95,7 @@
                 <option value="1m">1개월</option>
                 <option value="6m">6개월</option>
             </select>
-            <select th:field="*{searchSellStatus}" class="form-control" style="width:auto;">
+            <select th:field="*{itemSellStatus}" class="form-control" style="width:auto;">
                 <option value="">판매상태(전체)</option>
                 <option value="SELL">판매</option>
                 <option value="SOLD_OUT">품절</option>
