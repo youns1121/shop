@@ -73,11 +73,12 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false #true라면 JPA가 사용하는 기본 넘버링 전략으로 사용됨
-    #    show-sql: true # 테이블 생성 정보가 console상에 출력됨
+
     properties:
       hibernate:
+        default_batch_fetch_size: 1000 # 기본 batch size 설정
         format_sql: true # sql이 한줄 출력이 아닌 정렬됨
-
+        show-sql: true # 테이블 생성 정보가 console상에 출력됨
 
 
 logging.level:
