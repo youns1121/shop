@@ -63,11 +63,25 @@ public class OrderController {
 
         model.addAttribute("orders", orderHisDtoList);
         model.addAttribute("page", pageable.getPageNumber());
-        model.addAttribute("maxPAge", 5);
+        model.addAttribute("maxPage", 5);
 
         return "order/orderHist";
 
     }
+
+    @PostMapping("/order/{orderId}/cancel")
+    public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId, Principal principal){ // 주문 취소 권한 검사
+
+        if(!orderService.validateOrder(orderId, principal.getName())){
+
+            return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+
+        orderService.cancelOrder(orderId); // 주문 취소 로직 호출
+
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
+
 
 
 }
