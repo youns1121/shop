@@ -38,6 +38,7 @@ public class Order extends BaseEntity{
     public void addOrderItem(OrderItem orderItem){// orderItems에는 주문 상품 정보들을 담아줌, orderItem 객체를 order 객체에 추가함
         orderItemList.add(orderItem);
         orderItem.setOrder(this); // Order 엔티티와 OrderItem 엔티티가 양방향 참조 관계, orderItem 객체에도 order 객체를 세팅
+
     }
 
     public static Order createOrder(Member member, List<OrderItem> orderItemList){
@@ -60,5 +61,15 @@ public class Order extends BaseEntity{
             totalPrice += orderItem.getOrderPrice();
         }
         return totalPrice;
+    }
+
+    public void cancelOrder(){ //주문 상태를 취소 상태로 바꿔주는 메소드
+
+        this.orderStatus = OrderStatus.CANCEL;
+
+        for(OrderItem orderItem : orderItemList){
+
+            orderItem.cancel();
+        }
     }
 }
