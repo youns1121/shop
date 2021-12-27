@@ -1,6 +1,6 @@
-package com.shop.entity;
+package com.shop.domain;
 
-import com.shop.entity.comm.BaseEntity;
+import com.shop.domain.comm.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,4 +21,11 @@ public class Cart extends BaseEntity {
     @JoinColumn(name="member_id")
     private Member member;
 
+    public static Cart createCart(Member member){ // 장바구니 생성
+
+        Cart cart = new Cart();
+        cart.setMember(member);
+
+        return cart;
+    }
 }
