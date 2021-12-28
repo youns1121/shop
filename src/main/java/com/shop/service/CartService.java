@@ -35,6 +35,11 @@ public class CartService { // 장바구니에 상품을 담는 로직
 
         Cart cart = cartRepository.findByMemberId(member.getId());// 현재 로그인한 회원의 장바구니 엔티티 조회
 
+        if(cart == null){
+            cart = Cart.createCart(member); // 상품을 처음으로 장바구니에 담을 경우 해당 회원의 장바구니 엔티티 생성
+            cartRepository.save(cart);
+        }
+
         CartItem savedCartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), item.getId());// 현재 상품이 장바구니에 이미 들어가 있는지 조회
 
         if(savedCartItem != null){
