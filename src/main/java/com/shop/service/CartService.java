@@ -5,6 +5,7 @@ import com.shop.domain.Cart;
 import com.shop.domain.CartItem;
 import com.shop.domain.Item;
 import com.shop.domain.Member;
+import com.shop.dto.CartDetailDto;
 import com.shop.dto.CartItemDto;
 import com.shop.repository.CartItemRepository;
 import com.shop.repository.CartRepository;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +29,12 @@ public class CartService { // 장바구니에 상품을 담는 로직
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
 
+    /**
+     * 장바구니 담기
+     * @param cartItemDto
+     * @param email
+     * @return
+     */
     public Long addCart(CartItemDto cartItemDto, String email){
 
         Item item = itemRepository.findById(cartItemDto.getItemId())
@@ -53,7 +62,31 @@ public class CartService { // 장바구니에 상품을 담는 로직
 
             return cartItem.getId();
         }
+    }
 
+
+
+    /**
+     * 장바구니 상품 조회
+     * @param email
+     * @return
+     */
+    //현재 로그인한 회원의 정보를 이용하여 장바구니에 들어있는 상품을 조회
+    @Transactional(readOnly = true)
+    public List<CartDetailDto> getCartList(String email){
+
+        List<CartDetailDto> cartDetailDtoList = new ArrayList<>();
+
+        Member member = memberRepository.findByEmail(email);
+        Cart cart = cartRepository.findByMemberId(member.getId()); // 현재 로그인한 회원의 장바구니 엔티티를 조회합니다.
+        if(cart == null){ //장바구니에 상품을 한 번도 안 담았을 경우 장바구니 엔티티가 없으므로 빈 리스트를 반환
+            return cartDetailDtoList;
+        }
+
+        cartDetailDtoList = cartItemRepository.findCartDetailDtoList(cart.getId()); // 장바구니에 담겨있는 상품 정보를 조회
+
+        return cartDetailDtoList;
 
     }
+
 }
