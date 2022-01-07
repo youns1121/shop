@@ -43,6 +43,9 @@ public class CartItem extends BaseEntity {
 
     public void addCount(int count){ //장바구니에 기존에 담겨 있는 상품인데, 해당 상품을 추가로 장바구니에 담을 떄 기존 수량에 현재 담을 수량을 더해 줄때 사용
         this.count += count;
+    }
 
+    public void updateCount(int count){ // 현재 장바구니에 담겨있는 수량을 변경 메서드
+        this.count = count;
     }
 }
