@@ -120,6 +120,15 @@ public class CartService { // 장바구니에 상품을 담는 로직
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
 
         cartItem.updateCount(count);
+    }
+
+    /**
+     * 장바구니 상품 삭제하기
+     * @param cartItemId
+     */
+    public void deleteCartItem(Long cartItemId){ //장바구니 상품 삭제하기
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        cartItemRepository.delete(cartItem); // 추후 delYn 으로 관리 해야함
 
     }
 }
