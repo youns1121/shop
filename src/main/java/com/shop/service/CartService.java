@@ -136,7 +136,7 @@ public class CartService { // 장바구니에 상품을 담는 로직
     }
 
     //주문 로직으로 전달할 orderDto 리스트 생성 및 주문 로직 호출, 주문한 상품은 장바구니에서 제거하는 로직
-    public Long OrderCartItem(List<CartOrderDto> cartOrderDtoList, String email){
+    public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String email){
 
         List<OrderDto> orderDtoList = new ArrayList<>();
         for (CartOrderDto cartOrderDto : cartOrderDtoList){ // 장바구니 페이지에서 전달받은 주문 상품 번호를 이용하여 주문 로직으로 전달할 orderDto 객체를 만듬
