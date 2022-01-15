@@ -1,8 +1,8 @@
-package com.shop.entity;
+package com.shop.domain;
 
 
+import com.shop.domain.comm.BaseEntity;
 import com.shop.dto.form.ItemFormDto;
-import com.shop.entity.comm.BaseEntity;
 import com.shop.enums.ItemSellStatus;
 import com.shop.exception.OutOfStockException;
 import lombok.*;

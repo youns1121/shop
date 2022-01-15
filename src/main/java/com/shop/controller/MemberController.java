@@ -1,7 +1,7 @@
 package com.shop.controller;
 
-import com.shop.dto.MemberFormDto;
-import com.shop.entity.Member;
+import com.shop.dto.form.MemberFormDto;
+import com.shop.domain.Member;
 import com.shop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

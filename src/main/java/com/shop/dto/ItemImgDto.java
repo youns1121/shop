@@ -1,6 +1,6 @@
 package com.shop.dto;
 
-import com.shop.entity.ItemImg;
+import com.shop.domain.ItemImg;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;

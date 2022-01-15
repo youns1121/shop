@@ -2,19 +2,18 @@ package com.shop;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.shop.entity.Item;
-import com.shop.entity.QItem;
+import com.shop.domain.Item;
+
+import com.shop.domain.QItem;
 import com.shop.enums.ItemSellStatus;
 import com.shop.repository.ItemRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
@@ -36,9 +35,7 @@ class ShopApplicationTests {
         item.setItemDetail("테스트상세설명");
         item.setItemSellStatus(ItemSellStatus.SELL);
         item.setStockNumber(100);
-        item.setCreateTime(LocalDateTime.now());
-        item.setModifiTime(LocalDateTime.now());
-        item.setDelYn("N");
+
         Item saveItem = itemRepository.save(item);
 
         System.out.println(saveItem.toString());
@@ -54,9 +51,7 @@ class ShopApplicationTests {
             item.setItemDetail("테스트상세설명");
             item.setItemSellStatus(ItemSellStatus.SELL);
             item.setStockNumber(100+i);
-            item.setCreateTime(LocalDateTime.now());
-            item.setModifiTime(LocalDateTime.now());
-            item.setDelYn("N");
+
             Item saveItem = itemRepository.save(item);
 
             System.out.println(saveItem.toString());

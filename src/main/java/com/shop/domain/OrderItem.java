@@ -1,7 +1,6 @@
-package com.shop.entity;
+package com.shop.domain;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-import com.shop.entity.comm.BaseEntity;
+import com.shop.domain.comm.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -48,6 +47,7 @@ public class OrderItem extends BaseEntity {
 
         return orderPrice * count;
     }
+
 
     public void cancel() { // 주문을 취소할 경우 주문 수량만큼 상품의 재고를 증가시키는 메소드
 

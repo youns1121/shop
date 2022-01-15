@@ -2,7 +2,7 @@ package com.shop.repository.custom;
 
 import com.shop.dto.ItemSearchDto;
 import com.shop.dto.MainItemDto;
-import com.shop.entity.Item;
+import com.shop.domain.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

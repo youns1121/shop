@@ -1,7 +1,7 @@
-package com.shop.entity;
+package com.shop.domain;
 
-import com.shop.dto.MemberFormDto;
-import com.shop.entity.comm.BaseEntity;
+import com.shop.domain.comm.BaseEntity;
+import com.shop.dto.form.MemberFormDto;
 import com.shop.enums.MemberRole;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 
 
+@ToString
 @Getter
 @Setter
 @Table(name="member")

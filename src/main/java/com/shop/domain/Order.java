@@ -1,6 +1,6 @@
-package com.shop.entity;
+package com.shop.domain;
 
-import com.shop.entity.comm.BaseEntity;
+import com.shop.domain.comm.BaseEntity;
 import com.shop.enums.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;

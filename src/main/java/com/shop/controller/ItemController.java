@@ -4,7 +4,7 @@ package com.shop.controller;
 
 import com.shop.dto.ItemSearchDto;
 import com.shop.dto.form.ItemFormDto;
-import com.shop.entity.Item;
+import com.shop.domain.Item;
 import com.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 
@@ -90,7 +90,6 @@ public class ItemController {
             model.addAttribute("errorMessage", "첫번째 상품 이미지는 필수 입력 값 입니다.");
             return "item/itemForm";
         }
-
         try{
             itemService.updateItem(itemFormDto, itemImgFileList); // 상품 수정 로직을 호출
         } catch (Exception e) {
@@ -110,6 +109,7 @@ public class ItemController {
         model.addAttribute("itemSearchDto", itemSearchDto); // 페이지 전환 시 기존 검색 조건을 유지한 채 이동할 수 있도록 뷰에 다시 전달
         model.addAttribute("maxPage", 5); // 페이지 번호 최대 개수
 
+
         return "item/itemMng";
 
    }
@@ -117,10 +117,9 @@ public class ItemController {
    @GetMapping(value = "/item/{itemId}")
     public String itemDtl(Model model, @PathVariable("itemId") Long itemId){
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
-        model.addAttribute("itemFormDto", itemFormDto);
+        model.addAttribute("item", itemFormDto);
 
         return "item/itemDtl";
-
 
    }
 

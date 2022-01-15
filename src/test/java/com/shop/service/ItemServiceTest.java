@@ -1,8 +1,8 @@
 package com.shop.service;
 
 import com.shop.dto.form.ItemFormDto;
-import com.shop.entity.Item;
-import com.shop.entity.ItemImg;
+import com.shop.domain.Item;
+import com.shop.domain.ItemImg;
 import com.shop.enums.ItemSellStatus;
 import com.shop.repository.ItemImgRepository;
 import com.shop.repository.ItemRepository;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
-import java.nio.channels.MulticastChannel;
 import java.util.ArrayList;
 import java.util.List;
 

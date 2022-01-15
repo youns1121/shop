@@ -1,5 +1,9 @@
 package com.shop.entity;
 
+import com.shop.domain.Item;
+import com.shop.domain.Member;
+import com.shop.domain.Order;
+import com.shop.domain.OrderItem;
 import com.shop.enums.ItemSellStatus;
 import com.shop.repository.ItemRepository;
 import com.shop.repository.MemberRepository;
@@ -14,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 

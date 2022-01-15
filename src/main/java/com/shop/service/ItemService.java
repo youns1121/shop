@@ -4,8 +4,8 @@ import com.shop.dto.ItemImgDto;
 import com.shop.dto.ItemSearchDto;
 import com.shop.dto.MainItemDto;
 import com.shop.dto.form.ItemFormDto;
-import com.shop.entity.Item;
-import com.shop.entity.ItemImg;
+import com.shop.domain.Item;
+import com.shop.domain.ItemImg;
 import com.shop.repository.ItemImgRepository;
 import com.shop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true) // 상품 데이터를 읽어오는 트랜잭션을 읽기 전용 설정, jpa가 변경감지(더티체킹)을 수행하지 않아서 성능을 향상 시킬 수 있음
-    public ItemFormDto getItemdtl(Long itemId){
+    public ItemFormDto getItemDtl(Long itemId){
 
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId); // 해당 상품의 이미지를 등록 아이디 순으로 조회
 

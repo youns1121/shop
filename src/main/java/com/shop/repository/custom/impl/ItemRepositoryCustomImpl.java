@@ -3,12 +3,13 @@ package com.shop.repository.custom.impl;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.shop.domain.QItem;
+import com.shop.domain.QItemImg;
 import com.shop.dto.ItemSearchDto;
 import com.shop.dto.MainItemDto;
 import com.shop.dto.QMainItemDto;
-import com.shop.entity.Item;
-import com.shop.entity.QItem;
-import com.shop.entity.QItemImg;
+import com.shop.domain.Item;
+
 import com.shop.enums.ItemSellStatus;
 import com.shop.repository.custom.ItemRepositoryCustom;
 import org.springframework.data.domain.Page;
