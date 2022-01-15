@@ -111,7 +111,7 @@ public class CartController {
         }
 
         for(CartOrderDto cartOrder : cartOrderDtoList){
-            if(!(cartService.validateCartItem(cartOrderDto.getCartItemId(), principal.getName()))){ //주문 권한 체크
+            if(!(cartService.validateCartItem(cartOrder.getCartItemId(), principal.getName()))){ //주문 권한 체크
                     return new ResponseEntity<String>("주문 권한이 없습니다.", HttpStatus.FORBIDDEN);
             }
         }
