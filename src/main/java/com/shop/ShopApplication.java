@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.EntityManager;
 
-@EnableJpaAuditing
-@SpringBootApplication // Spring Audit 기능을 활용하기 위해
+
+@SpringBootApplication
 public class ShopApplication {
 
     public static void main(String[] args) {
