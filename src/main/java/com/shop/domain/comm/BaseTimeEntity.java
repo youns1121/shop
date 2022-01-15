@@ -1,4 +1,4 @@
-package com.shop.entity.comm;
+package com.shop.domain.comm;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +18,10 @@ import java.time.LocalDateTime;
 public abstract class BaseTimeEntity {
 
     @CreatedDate // Entity가 생성되어 저장될 때 시간이 자동 저장
-    @Column(updatable = false)
+    @Column(name="create_time", updatable = false)
     private LocalDateTime createTime; //생성시간
 
     @LastModifiedDate // 조회한 Entity의 값을 변경할 때 시간이 자동 저장
-    @Column
+    @Column(name="update_time")
     private LocalDateTime updateTime;  //수정시간
 }

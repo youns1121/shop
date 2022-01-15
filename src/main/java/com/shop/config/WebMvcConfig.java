@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Value("${custom.path.uploadPath:D:/shop/}") /*application.yml에 설정한 "uploadPath" 프로퍼티 값을 읽어옴*/
+    @Value("${custom.path.uploadPath=file:///D:/shop/}") /*application.yml에 설정한 "uploadPath" 프로퍼티 값을 읽어옴*/
     String uploadPath;
 
     @Override
