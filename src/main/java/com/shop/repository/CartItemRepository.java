@@ -15,7 +15,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     @Query("select new com.shop.dto.CartDetailDto(ci.id, i.itemNm, i.price, ci.count, im.imgUrl) " + // DTO 클래스 생성자에 명시한 순
         "from CartItem ci, ItemImg im " +
         "join ci.item i " +
-        "where ci.cart.id = ci.item.id " +
+        "where ci.cart.id = :cartId " +
         "and im.item.id = ci.item.id " + // 장바구니에 담겨있는 상품의 대표 이미지만 가지고 오도록 조건문 작성
         "and im.repImgYn = 'Y' " + // 장바구니에 담겨있는 상품의 대표 이미지만 가지고 오도록 조건문 작성
         "order by ci.createTime desc")
