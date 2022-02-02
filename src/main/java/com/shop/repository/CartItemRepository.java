@@ -4,6 +4,7 @@ import com.shop.domain.CartItem;
 import com.shop.dto.CartDetailDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -19,6 +20,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
         "and im.item.id = ci.item.id " + // 장바구니에 담겨있는 상품의 대표 이미지만 가지고 오도록 조건문 작성
         "and im.repImgYn = 'Y' " + // 장바구니에 담겨있는 상품의 대표 이미지만 가지고 오도록 조건문 작성
         "order by ci.createTime desc")
-    List<CartDetailDto> findCartDetailDtoList(Long cartId);
+    List<CartDetailDto> findCartDetailDtoList(@Param("cartId") Long cartId);
 
 }
