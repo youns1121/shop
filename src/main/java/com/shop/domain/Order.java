@@ -2,14 +2,17 @@ package com.shop.domain;
 
 import com.shop.domain.comm.BaseEntity;
 import com.shop.enums.OrderStatus;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@EqualsAndHashCode(of="id")
 @Getter
 @Setter
 @Table(name = "orders")

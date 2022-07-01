@@ -4,7 +4,6 @@ import com.shop.dto.CartDetailDto;
 import com.shop.dto.CartItemDto;
 import com.shop.dto.CartOrderDto;
 import com.shop.service.CartService;
-import javafx.beans.binding.StringBinding;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -105,7 +104,7 @@ public class CartController {
 
         List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
 
-        if(cartOrderDtoList == null || cartOrderDtoList.size() ==0) { //주문할 상품을 선택하지 않았는지 체크
+        if(cartOrderDtoList == null || cartOrderDtoList.size() == 0) { //주문할 상품을 선택하지 않았는지 체크
 
             return new ResponseEntity<String>("주문할 상품을 선택해주세요", HttpStatus.FORBIDDEN);
         }

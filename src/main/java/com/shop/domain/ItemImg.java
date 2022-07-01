@@ -1,11 +1,13 @@
 package com.shop.domain;
 
 import com.shop.domain.comm.BaseEntity;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(of="id")
 @Setter
 @Getter
 @Table(name="item_img")

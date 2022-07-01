@@ -1,13 +1,13 @@
 package com.shop.entity;
 
-import com.shop.dto.MemberFormDto;
+import com.shop.domain.Cart;
+import com.shop.domain.Member;
+import com.shop.dto.form.MemberFormDto;
 import com.shop.repository.CartRepository;
 import com.shop.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;

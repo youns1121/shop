@@ -3,6 +3,7 @@ package com.shop.service;
 import com.shop.domain.Member;
 import com.shop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,11 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class MemberService implements UserDetailsService {
     /*UserDetailsService : DB에서 회원 정보를 가져오는 역할을 담당*/
 
-    private final MemberRepository memberRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
 
     public Member saveMember(Member member){ /*회원 생성*/

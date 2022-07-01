@@ -22,8 +22,4 @@ public abstract class BaseEntity extends BaseTimeEntity{
     @Column(name = "modified_by")
     private String modifiedBy;
 
-//    @Column(name="del_yn", columnDefinition = "VARCHAR(1) DEFAULT 'N'")
-//    private String delYn; //삭제여부
-
-
 }

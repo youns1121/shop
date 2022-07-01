@@ -6,6 +6,7 @@ import com.shop.enums.ItemSellStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -31,6 +32,8 @@ public class ItemFormDto {
     private Integer stockNumber;
 
     private ItemSellStatus itemSellStatus;
+
+    private List<MultipartFile> itemImgFileList;
 
     private List<ItemImgDto> itemImgDtoList = new ArrayList<>(); // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트
 

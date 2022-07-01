@@ -1,8 +1,11 @@
 package com.shop.domain;
 
+
 import com.shop.domain.comm.BaseEntity;
 import com.shop.dto.form.MemberFormDto;
 import com.shop.enums.MemberRole;
+
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
-
+@EqualsAndHashCode(of = "id")
 @ToString
 @Getter
 @Setter
@@ -18,7 +21,8 @@ import javax.persistence.*;
 @Entity
 public class Member extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name ="member_id")
     private Long id;
 
@@ -55,7 +59,7 @@ public class Member extends BaseEntity {
         return member;
     }
 
-//    @Builder
+    //    @Builder
 //    public void createMember(MemberDto memberDto, PasswordEncoder passwordEncoder){
 //        this.name= memberDto.getName();
 //        this.email= memberDto.getEmail();

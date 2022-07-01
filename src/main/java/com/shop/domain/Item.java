@@ -9,7 +9,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-
+@EqualsAndHashCode(of="id")
 @ToString
 @Setter
 @Getter
