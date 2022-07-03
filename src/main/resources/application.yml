@@ -13,7 +13,7 @@ spring:
       on-profile: "common"
 
 server:
-  port: 8080
+  port: 8081
   servlet:
     encoding:
       charset: UTF-8
@@ -27,15 +27,8 @@ custom:
     uploadPath:       #리소스 업로드 경로
 
 
-
-
-
-
-
-
 ---
 #local
-
 
 
 spring:
@@ -62,7 +55,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/shop?characterEncoding=UTF-8 #&useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3307/shop?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: root
     password: wjdqhqhdks
 

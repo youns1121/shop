@@ -40,17 +40,17 @@ public class ItemController {
     }
 
     @PostMapping(value = "/admin/item/new")
-    public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model,
-                          @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList){
+    public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, List<MultipartFile> itemImgFileList){
 
         if(bindingResult.hasErrors()){// 상품 등록 시 필수 값이 없다면 다시 상품 등록 페이지로 전환합니다.
             return "item/itemForm";
         }
 
-        if(itemImgFileList.get(0).isEmpty() && itemFormDto.getId() == null){ // 상품 등록 시 첫 번째 이미지가 없다면 에러 메시지와 함께 상품 등록 페이지로 전환
+        if(itemImgFileList.get(0).isEmpty() || itemImgFileList.isEmpty()){ // 상품 등록 시 첫 번째 이미지가 없다면 에러 메시지와 함께 상품 등록 페이지로 전환
             model.addAttribute("errorMessage", "첫번째 상품 이미지는 필수 입력 값 입니다.");
             return "item/itemForm";
         }
+
         try{
             itemService.saveItem(itemFormDto, itemImgFileList); //상품 저장 로직을 호출합니다
 

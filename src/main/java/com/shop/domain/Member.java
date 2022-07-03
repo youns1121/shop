@@ -5,16 +5,15 @@ import com.shop.domain.comm.BaseEntity;
 import com.shop.dto.form.MemberFormDto;
 import com.shop.enums.MemberRole;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString
 @Getter
 @Setter
 @Table(name="member")
@@ -42,31 +41,19 @@ public class Member extends BaseEntity {
     @Column(name = "member_role")
     private MemberRole memberRole;
 
-
-
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
 
-        Member member = new Member();
-
-        member.setName(memberFormDto.getName());
-        member.setEmail(memberFormDto.getEmail());
-        member.setAddress(memberFormDto.getAddress());
-
         String password = passwordEncoder.encode(memberFormDto.getPassword());
-        member.setPassword(password);
-        member.setMemberRole(MemberRole.ADMIN);
 
-        return member;
+        return Member.builder()
+                .name(memberFormDto.getName())
+                .email(memberFormDto.getEmail())
+                .address(memberFormDto.getAddress())
+                .password(memberFormDto.getPassword())
+                .memberRole(MemberRole.ADMIN)
+                .password(password)
+                .build();
     }
 
-    //    @Builder
-//    public void createMember(MemberDto memberDto, PasswordEncoder passwordEncoder){
-//        this.name= memberDto.getName();
-//        this.email= memberDto.getEmail();
-//        this.email = memberDto.getEmail();
-//        this.address = memberDto.getAddress();
-//        this.password = passwordEncoder.encode(memberDto.getPassword());
-//        this.memberRole = MemberRole.USER;
-//    }
 
 }

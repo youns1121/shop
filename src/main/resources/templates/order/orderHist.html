@@ -8,6 +8,11 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link th:href="@{/css/order/orderHist.css}" rel="stylesheet" />
+</th:block>
+
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 
@@ -52,10 +57,7 @@
 
 </th:block>
 
-<!-- 사용자 CSS 추가 -->
-<th:block layout:fragment="css">
-    <link th:href="@{/css/orderHist.css}" rel="stylesheet" />
-</th:block>
+
 
 <div layout:fragment="content" class="content-mg">
 

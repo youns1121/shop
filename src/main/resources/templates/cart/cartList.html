@@ -90,7 +90,7 @@
 
             $.ajax({
                 url      : url,
-                type     : "DELETE",
+                type     : "DELETE", //장바구니 상품을 삭제하는 경우이므로 Delete type을 사용
                 beforeSend : function(xhr){
                     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
                     xhr.setRequestHeader(header, token);
@@ -98,7 +98,7 @@
                 dataType : "json",
                 cache   : false,
                 success  : function(result, status){
-                    location.href='/cart';
+                    location.href='/cart'; //삭제 요청이 정상적으로 처리되면 장바구니 페이지를 새로고침
                 },
                 error : function(jqXHR, status, error){
 
@@ -122,14 +122,14 @@
             var dataList = new Array();
             var paramData = new Object();
 
-            $("input[name=cartChkBox]:checked").each(function() {
+            $("input[name=cartChkBox]:checked").each(function() { // 체크된 장바구니 상품 아이디를 전달하기 위해서 dataList 배열에 장바구니 상품 아이디를 객체로 만들어서 저장
                 var cartItemId = $(this).val();
                 var data = new Object();
                 data["cartItemId"] = cartItemId;
                 dataList.push(data);
             });
 
-            paramData['cartOrderDtoList'] = dataList;
+            paramData['cartOrderDtoList'] = dataList; // 체크된 장바구니 상품 아이디를 저장하고 있는 dataList 배열을 paramData 객체에 추가
 
             var param = JSON.stringify(paramData);
 
@@ -146,7 +146,7 @@
                 cache   : false,
                 success  : function(result, status){
                     alert("주문이 완료 되었습니다.");
-                    location.href='/orders';
+                    location.href='/orders'; // 주문 요청 결과 성공하였다면 구매이력 페이지로 이동
                 },
                 error : function(jqXHR, status, error){
 
@@ -232,6 +232,7 @@
                                       th:data-price="${cartItem.price}"
                                       th:text="${cartItem.price} + '원'" class="align-self-center mr-2">
                                 </span>
+
                                 <input type="number" name="count" th:id="'count_' + ${cartItem.cartItemId}"
                                        th:value="${cartItem.count}" min="1"
                                        onchange="changeCount(this)" class="form-control mr-2" >

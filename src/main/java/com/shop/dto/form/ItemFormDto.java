@@ -33,8 +33,6 @@ public class ItemFormDto {
 
     private ItemSellStatus itemSellStatus;
 
-    private List<MultipartFile> itemImgFileList;
-
     private List<ItemImgDto> itemImgDtoList = new ArrayList<>(); // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트
 
     private List<Long> itemImgIds = new ArrayList<>(); // 상품 이미지 아이디를 저장하는 리스트, 수정시에 이미지 아이디를 담아둘 용도

@@ -30,7 +30,6 @@ public class Item extends BaseEntity { /*상품*/
     @Column(name="stock_number", nullable = false)
     private int stockNumber; //재고수량
 
-    @Lob
     @Column(name="item_detail", nullable = false)
     private String itemDetail; //상품 상세 설명
 

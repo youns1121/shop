@@ -1,5 +1,7 @@
 package com.shop.dto;
 
+import com.shop.domain.Cart;
+import com.shop.domain.Item;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,4 +17,9 @@ public class CartItemDto { //상품 상세페이지 장바구니 담기
 
     @Min(value = 1, message = "최소 1개 이상 담아주세요")
     private int count;
+
+//    private Cart cart;
+//
+//    private Item item;
+
 }

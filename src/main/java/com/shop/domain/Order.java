@@ -2,9 +2,7 @@ package com.shop.domain;
 
 import com.shop.domain.comm.BaseEntity;
 import com.shop.enums.OrderStatus;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 import javax.persistence.*;
@@ -12,9 +10,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of="id")
-@Getter
 @Setter
+@Getter
 @Table(name = "orders")
 @Entity
 public class Order extends BaseEntity{
@@ -29,7 +30,7 @@ public class Order extends BaseEntity{
     private Member member;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true) // 부모 엔티티의 영속성 상태 변화를 자식 엔티티에 모두 전이, 고아 객체 제거
-    private List<OrderItem> orderItemList = new ArrayList<>();
+    private List<OrderItem> orderItemList;
 
     @Column(name = "order_date")
     private LocalDateTime orderDate; //주문일
@@ -45,6 +46,7 @@ public class Order extends BaseEntity{
     }
 
     public static Order createOrder(Member member, List<OrderItem> orderItemList){
+
         Order order = new Order();
         order.setMember(member); // 상품을 주문한 회원 세팅
         for(OrderItem orderItem : orderItemList){ // 상품 페이지에서는 1개의 상품을 주문, 장바구니 페이지에서는 한 번에 여러개 상품을 주문

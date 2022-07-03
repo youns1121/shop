@@ -1,15 +1,14 @@
 package com.shop.domain;
 
 import com.shop.domain.comm.BaseEntity;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of="id")
 @Getter
-@Setter
 @Table(name ="cart_item")
 @Entity
 public class CartItem extends BaseEntity {
@@ -30,16 +29,14 @@ public class CartItem extends BaseEntity {
     @Column(name = "count", nullable = false)
     private int count; //수량
 
-
+    @Builder
     public static CartItem createCartItem(Cart cart, Item item, int count){ // 장바구니에 담을 상품 엔티티 생성
 
-        CartItem cartItem = new CartItem();
-
-        cartItem.setItem(item);
-        cartItem.setCart(cart);
-        cartItem.setCount(count);
-
-        return cartItem;
+        return CartItem.builder()
+                .item(item)
+                .cart(cart)
+                .count(count)
+                .build();
     }
 
     public void addCount(int count){ //장바구니에 기존에 담겨 있는 상품인데, 해당 상품을 추가로 장바구니에 담을 떄 기존 수량에 현재 담을 수량을 더해 줄때 사용

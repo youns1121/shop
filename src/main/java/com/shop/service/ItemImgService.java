@@ -44,7 +44,7 @@ public class ItemImgService {
          * imgUrl : 업로드 결과 로컬에 저장된 상품 이미지 파일을 불러오는 경로
          */
 
-        itemImg.updateItemimg(oriImgName, imgName, imgUrl);
+        itemImg.updateItemImg(oriImgName, imgName, imgUrl);
         itemImgRepository.save(itemImg);
     }
 
@@ -61,7 +61,7 @@ public class ItemImgService {
             String oriImgName = itemImgFile.getOriginalFilename();
             String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes()); // 업데이트한 상품 이미지 파일을 업로드합니다.
             String imgUrl = "/images/item" + imgName;
-            savedItemimg.updateItemimg(oriImgName, imgName, imgUrl); // 변경된 상품 이미지 정보를 세팅
+            savedItemimg.updateItemImg(oriImgName, imgName, imgUrl); // 변경된 상품 이미지 정보를 세팅
         }
     }
 
