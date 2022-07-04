@@ -24,7 +24,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
 public class CartService { // 장바구니에 상품을 담는 로직
 
     private final ItemRepository itemRepository;
@@ -39,6 +38,7 @@ public class CartService { // 장바구니에 상품을 담는 로직
      * @param email
      * @return
      */
+    @Transactional
     public Long addCart(CartItemDto cartItemDto, String email){
 
         Item item = itemRepository.findById(cartItemDto.getItemId())
@@ -118,6 +118,7 @@ public class CartService { // 장바구니에 상품을 담는 로직
      * @param cartItemId
      * @param count
      */
+    @Transactional
     public void updateCartItemCount(Long cartItemId, int count){
 
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
@@ -129,13 +130,15 @@ public class CartService { // 장바구니에 상품을 담는 로직
      * 장바구니 상품 삭제하기
      * @param cartItemId
      */
+    @Transactional
     public void deleteCartItem(Long cartItemId){ //장바구니 상품 삭제하기
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
-        cartItemRepository.delete(cartItem); // 추후 delYn 으로 관리 해야함
+        cartItemRepository.delete(cartItem);
 
     }
 
     //주문 로직으로 전달할 orderDto 리스트 생성 및 주문 로직 호출, 주문한 상품은 장바구니에서 제거하는 로직
+    @Transactional
     public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String email){
 
         List<OrderDto> orderDtoList = new ArrayList<>();
@@ -157,7 +160,5 @@ public class CartService { // 장바구니에 상품을 담는 로직
         }
 
         return orderId;
-
-
     }
 }
