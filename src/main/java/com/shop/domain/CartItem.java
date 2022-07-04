@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")
@@ -29,7 +30,6 @@ public class CartItem extends BaseEntity {
     @Column(name = "count", nullable = false)
     private int count; //수량
 
-    @Builder
     public static CartItem createCartItem(Cart cart, Item item, int count){ // 장바구니에 담을 상품 엔티티 생성
 
         return CartItem.builder()

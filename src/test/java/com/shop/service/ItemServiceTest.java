@@ -56,7 +56,7 @@ class ItemServiceTest {
     void saveItem() throws Exception{
 
         ItemFormDto itemFormDto = new ItemFormDto(); // 상품 등록 화면에서 입력 받는 상품 데이터를 셋팅
-        itemFormDto.setItemNm("테스트상품");
+        itemFormDto.setItemName("테스트상품");
         itemFormDto.setItemSellStatus(ItemSellStatus.SELL);
         itemFormDto.setItemDetail("테스트 상품 입니다.");
         itemFormDto.setPrice(1000);
@@ -68,7 +68,7 @@ class ItemServiceTest {
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
         Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
 
-        assertEquals(itemFormDto.getItemNm(), item.getItemNm()); // 입력한 상품 데이터와 실제로 저장된 상품 데이터가 같은지 확인
+        assertEquals(itemFormDto.getItemName(), item.getItemName()); // 입력한 상품 데이터와 실제로 저장된 상품 데이터가 같은지 확인
         assertEquals(itemFormDto.getItemSellStatus(), item.getItemSellStatus());
         assertEquals(itemFormDto.getItemDetail(), item.getItemDetail());
         assertEquals(itemFormDto.getPrice(), item.getPrice());

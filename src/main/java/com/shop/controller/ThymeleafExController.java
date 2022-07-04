@@ -27,7 +27,7 @@ public class ThymeleafExController {
 
         ItemDto itemDto = new ItemDto();
         itemDto.setItemDetail("상품 상세 설명");
-        itemDto.setItemNm("테스트 상품1");
+        itemDto.setItemName("테스트 상품1");
         itemDto.setPrice(10000);
         itemDto.setCreateTime(LocalDateTime.now());
 
@@ -45,7 +45,7 @@ public class ThymeleafExController {
 
             ItemDto itemDto = new ItemDto();
             itemDto.setItemDetail("상품 상세 설명" + i);
-            itemDto.setItemNm("테스트 상품" + i);
+            itemDto.setItemName("테스트 상품" + i);
             itemDto.setPrice(1000 * i);
             itemDto.setCreateTime(LocalDateTime.now());
 
@@ -66,7 +66,7 @@ public class ThymeleafExController {
 
             ItemDto itemDto = new ItemDto();
             itemDto.setItemDetail("상품 상세 설명"+i);
-            itemDto.setItemNm("테스트 상품"+i);
+            itemDto.setItemName("테스트 상품"+i);
             itemDto.setPrice(1000*i);
             itemDto.setCreateTime(LocalDateTime.now());
 

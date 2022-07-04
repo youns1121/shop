@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -23,26 +24,23 @@ public class ItemImgService {
 
     private final FileService fileService;
 
-    public void saveItemImg(ItemImg itemImg, MultipartFile itemImgFile) throws Exception{
+    public void saveItemImg(ItemImg itemImg, MultipartFile itemImgFile) throws IOException {
 
-        String oriImgName = itemImgFile.getOriginalFilename();
-        String imgName = "";
-        String imgUrl = "";
-
-        //파일 업로드
-        if(!StringUtils.isEmpty(oriImgName)){
-
-            imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes()); // 호출 결과 로컬에 저장된 파일의 이름을 저장
-
-            imgUrl = "/images/item/" + imgName; // 저장한 상품 이미지를 불러올 경로를 설정
-        }
-
-        //상품 이미지 정보 저장
         /**
          * imgName : 실제 로컬에 저장된 상품 이미지 파일의 이름
          * orilmgName : 업로드했던 상품 이미지 파일의 원래 이름
          * imgUrl : 업로드 결과 로컬에 저장된 상품 이미지 파일을 불러오는 경로
          */
+
+        String oriImgName = itemImgFile.getOriginalFilename();
+
+        if(StringUtils.isEmpty(oriImgName)){
+
+            throw new IllegalStateException("파일이 존재하지 않습니다.");
+        }
+
+        String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
+        String imgUrl = "/images/item/" + imgName; // 저장한 상품 이미지를 불러올 경로를 설정
 
         itemImg.updateItemImg(oriImgName, imgName, imgUrl);
         itemImgRepository.save(itemImg);

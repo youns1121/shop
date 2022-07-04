@@ -10,7 +10,7 @@ public class MainItemDto {
 
     private Long id;
 
-    private String itemNm;
+    private String itemName;
 
     private String itemDetail;
 
@@ -19,9 +19,9 @@ public class MainItemDto {
     private Integer price;
 
     @QueryProjection // Querydsl로 결과 조회 시 MainItemDto 객체로 바로 받아 오도록 활용
-    public MainItemDto(Long id, String itemNm, String itemDetail, String imgUrl, Integer price) {
+    public MainItemDto(Long id, String itemName, String itemDetail, String imgUrl, Integer price) {
         this.id = id;
-        this.itemNm = itemNm;
+        this.itemName = itemName;
         this.itemDetail = itemDetail;
         this.imgUrl = imgUrl;
         this.price = price;

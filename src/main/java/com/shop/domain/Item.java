@@ -15,20 +15,20 @@ import javax.persistence.*;
 @Getter
 @Table(name="item")
 @Entity
-public class Item extends BaseEntity { /*상품*/
+public class Item extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "item_id")
     private Long id;
 
-    @Column(name ="item_nm", nullable = false)
-    private String itemNm; //상품명
+    @Column(name ="item_name", nullable = false)
+    private String itemName;
 
     @Column(name="price", nullable = false)
-    private int price; //가격
+    private int price;
 
     @Column(name="stock_number", nullable = false)
-    private int stockNumber; //재고수량
+    private int stockNumber;
 
     @Column(name="item_detail", nullable = false)
     private String itemDetail; //상품 상세 설명
@@ -41,7 +41,7 @@ public class Item extends BaseEntity { /*상품*/
 
     public void updateItem(ItemFormDto itemFormDto){
 
-        this.itemNm = itemFormDto.getItemNm();
+        this.itemName = itemFormDto.getItemName();
         this.price = itemFormDto.getPrice();
         this.stockNumber = itemFormDto.getPrice();
         this.itemDetail = itemFormDto.getItemDetail();

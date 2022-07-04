@@ -4,18 +4,19 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 @Service
 @Log
 public class FileService {
 
-    public String uploadFile(String uploadPath, String originalFileName, byte[] fileDate) throws Exception{
+    public String uploadFile(String uploadPath, String originalFileName, byte[] fileDate) throws IOException {
 
-        UUID uuid = UUID.randomUUID(); //서로 다른 개체들을 구분하기 위해서 이름을 부여할 때 사용, 파일이름으로 사용하면 중복문제 해결
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        String savedFileName = uuid.toString() + extension; //UUID로 받은 값과 원래 파일의 이름의 확장자를 조합해서 저장될 파일 이름을 만듬
+        String savedFileName = UUID.randomUUID() + extension; //UUID로 받은 값과 원래 파일의 이름의 확장자를 조합해서 저장될 파일 이름을 만듬
         String fileUploadFullUrl = uploadPath + "/" + savedFileName;
         FileOutputStream fos = new FileOutputStream(fileUploadFullUrl); // FileOutputStream는 바이트 단위의 출력을 내보내는 클래스, 생성자로 파일이 저장될 위치와 파일의 이름을 넘겨 파일에 쓸 파일 출력 스트림을 만듬
         fos.write(fileDate);

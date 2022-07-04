@@ -12,6 +12,7 @@ import com.shop.domain.Item;
 
 import com.shop.dto.QMainItemDto;
 import com.shop.enums.ItemSellStatus;
+import com.shop.enums.StatusEnum;
 import com.shop.repository.custom.ItemRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -55,8 +56,8 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
     private BooleanExpression searchByLike(String searchBy, String searchQuery){ // searchBy의 값에 따라서 상품명에 검색어를 포함하고 있는 상품 또는 상품 생성자의 아이디에 검색어를 포함하고 있는 상품을 조회하도록 조건값을 반환
 
-        if(StringUtils.equals("itemNm", searchBy)){
-            return QItem.item.itemNm.like("%" + searchQuery + "%");
+        if(StringUtils.equals("itemName", searchBy)){
+            return QItem.item.itemName.like("%" + searchQuery + "%");
         } else if(StringUtils.equals("createdBy", searchBy)){
             return QItem.item.createdBy.like("%" + searchQuery + "%");
         }
@@ -64,9 +65,9 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
         return null;
     }
 
-    private BooleanExpression itemNmLike(String searchQuery){ // 검색어가 null이 아니라면 상품명에 해당 검색어가 포함되는 상품을 조회하는 조건을 반환
+    private BooleanExpression itemNameLike(String searchQuery){ // 검색어가 null이 아니라면 상품명에 해당 검색어가 포함되는 상품을 조회하는 조건을 반환
 
-        return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%"+searchQuery+"%");
+        return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemName.like("%"+searchQuery+"%");
    }
 
 
@@ -99,16 +100,17 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 .select(
                         new QMainItemDto( // QMainItemDto의 생성자에 반환할 값들을 넣어줌, @QueryProject을 사용하면 DTO로 바로 조회가 가능
                                 item.id,
-                                item.itemNm,
+                                item.itemName,
                                 item.itemDetail,
                                 itemImg.imgUrl,
-                                item.price)
+                                item.price
+                        )
 
                 )
                 .from(itemImg)
-                .join(itemImg.item, item) //내부 조인
-                .where(itemImg.repImgYn.eq("Y")) //대표상품 이미지 여부
-                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .join(itemImg.item, item)
+                .where(itemImg.repImgYn.eq(StatusEnum.FLAG_Y.Value())) //대표상품 이미지 여부
+                .where(itemNameLike(itemSearchDto.getSearchQuery()))
                 .orderBy(item.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

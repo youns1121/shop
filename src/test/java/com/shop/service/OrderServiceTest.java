@@ -43,7 +43,7 @@ class OrderServiceTest {
     public Item saveItem(){ // 테스트를 위한 주문할 상품
         Item item = new Item();
 
-        item.setItemNm("테스트 상품");
+        item.setItemName("테스트 상품");
         item.setPrice(10000);
         item.setItemDetail("테스트 상품 상세 설명");
         item.setItemSellStatus(ItemSellStatus.SELL);

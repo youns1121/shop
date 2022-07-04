@@ -60,8 +60,8 @@ public class CartService { // 장바구니에 상품을 담는 로직
 
             return savedCartItem.getId();
         }else {
-            CartItem cartItem =
-                    CartItem.createCartItem(cart, item, cartItemDto.getCount()); // 장바구니, 상품 엔티티, 장바구니에 담을 수량을 이용해 CartItem 엔티티 생성
+            // 장바구니, 상품 엔티티, 장바구니에 담을 수량을 이용해 CartItem 엔티티 생성
+            CartItem cartItem = CartItem.createCartItem(cart, item, cartItemDto.getCount());
             cartItemRepository.save(cartItem); // 장바구니에 들어갈 상품을 저장
 
             return cartItem.getId();
