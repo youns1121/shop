@@ -109,7 +109,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 )
                 .from(itemImg)
                 .join(itemImg.item, item)
-                .where(itemImg.repImgYn.eq(StatusEnum.FLAG_Y.Value())) //대표상품 이미지 여부
+                .where(itemImg.repImgYn.eq(StatusEnum.FLAG_Y.getValue())) //대표상품 이미지 여부
                 .where(itemNameLike(itemSearchDto.getSearchQuery()))
                 .orderBy(item.id.desc())
                 .offset(pageable.getOffset())

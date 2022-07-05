@@ -5,16 +5,17 @@ import com.shop.domain.Item;
 import com.shop.enums.ItemSellStatus;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.modelmapper.ModelMapper;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
+@NoArgsConstructor
 @Getter
 @Setter
 public class ItemFormDto {
@@ -33,16 +34,35 @@ public class ItemFormDto {
     @NotNull(message = "재고는 필수 입력 값입니다.")
     private Integer stockNumber;
 
+    @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
 
     private List<ItemImgDto> itemImgDtoList; // 상품 저장 후 수정할 때 상품 이미지 정보를 저장하는 리스트
 
     private List<Long> itemImgIds; // 상품 이미지 아이디를 저장하는 리스트, 수정시에 이미지 아이디를 담아둘 용도
 
-//    public Item createItem(){
-//        // modelMapper를 이용하여 엔티티 객체와 Dto 객체 간의 데이터를 복사하여 복사한 객체를 반환해주는 메소드
-//       return modelMapper.map(this, Item.class);
-//    }
+    @Builder
+    public ItemFormDto(Long id, String itemName, Integer price, String itemDetail, Integer stockNumber, ItemSellStatus itemSellStatus, List<ItemImgDto> itemImgDtoList, List<Long> itemImgIds) {
+        this.id = id;
+        this.itemName = itemName;
+        this.price = price;
+        this.itemDetail = itemDetail;
+        this.stockNumber = stockNumber;
+        this.itemSellStatus = itemSellStatus;
+        this.itemImgDtoList = itemImgDtoList;
+        this.itemImgIds = itemImgIds;
+    }
+
+    public Item createItem(ItemFormDto itemFormDto){
+
+        return Item.builder()
+                .itemDetail(itemFormDto.getItemDetail())
+                .itemName(itemFormDto.getItemName())
+                .itemSellStatus(itemFormDto.getItemSellStatus())
+                .stockNumber(itemFormDto.getStockNumber())
+                .price(itemFormDto.getPrice())
+                .build();
+    }
 
     public static ItemFormDto of(Item item){
 //        return modelMapper.map(item, ItemFormDto.class); // modelMapper를 이용하여 엔티티 객체와 Dto 객체 간의 데이터를 복사하여 복사한 객체를 반횐해주는 메서드
@@ -51,6 +71,7 @@ public class ItemFormDto {
                 .id(item.getId())
                 .itemName(item.getItemName())
                 .price(item.getPrice())
+                .itemSellStatus(item.getItemSellStatus())
                 .itemDetail(item.getItemDetail())
                 .stockNumber(item.getStockNumber())
                 .build();

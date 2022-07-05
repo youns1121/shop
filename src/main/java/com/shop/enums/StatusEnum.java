@@ -13,12 +13,12 @@ public enum StatusEnum implements EnumModel{
     final String statusMessage;
 
     @Override
-    public String Key() {
+    public String getKey() {
         return name();
     }
 
     @Override
-    public String Value() {
+    public String getValue() {
         return statusMessage;
     }
 }

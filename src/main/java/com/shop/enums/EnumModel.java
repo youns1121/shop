@@ -2,6 +2,6 @@ package com.shop.enums;
 
 public interface EnumModel {
 
-    String Key();
-    String Value();
+    String getKey();
+    String getValue();
 }

@@ -26,6 +26,7 @@ public class CartController {
     @PostMapping(value = "/cart")
     public @ResponseBody ResponseEntity order(@RequestBody @Valid CartItemDto cartItemDto,
                                               BindingResult bindingResult, Principal principal) {
+
         if (bindingResult.hasErrors()) { //장바구니에 담을 상품 정보를 받는 cartItemDto 객체에 데이터 바인딩 시 에러가 있는지 검사
 
             StringBuilder sb = new StringBuilder();
@@ -36,7 +37,7 @@ public class CartController {
                 sb.append(fieldError.getDefaultMessage());
             }
 
-            return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(sb.toString(), HttpStatus.BAD_REQUEST);
 
         }
 
@@ -47,10 +48,9 @@ public class CartController {
             cartItemId = cartService.addCart(cartItemDto, email);
         } catch (Exception e){
 
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        // 결과값으로 생성된 장바구니 상품 아이디와 요청이 성공하였다는 Http 응답 상태 코드 반환
-        return  new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+        return  new ResponseEntity<>(cartItemId, HttpStatus.OK);
     }
 
 
@@ -69,13 +69,15 @@ public class CartController {
     public @ResponseBody ResponseEntity updateCartItem(@PathVariable("cartItemId") Long cartItemId, int count, Principal principal){
 
         if(count <= 0){ // 0개이하로 업데이트 요청시 에러 메시지를 담아 반환
-            return new ResponseEntity<String>("최소 1개 이상 담아주세요", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("최소 1개 이상 담아주세요", HttpStatus.BAD_REQUEST);
+
         }else if(!cartService.validateCartItem(cartItemId, principal.getName())){ // 수정 권한 체크
-            return new ResponseEntity<String>("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
+
+            return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 
         cartService.updateCartItemCount(cartItemId, count);// 장바구니 상품의 개수를 업데이트
-        return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+        return new ResponseEntity<>(cartItemId, HttpStatus.OK);
 
     }
 

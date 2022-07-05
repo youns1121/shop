@@ -9,6 +9,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@NoArgsConstructor
 @EqualsAndHashCode(of="id")
 @ToString
 @Setter
@@ -38,6 +39,15 @@ public class Item extends BaseEntity {
     private ItemSellStatus itemSellStatus; //상품 판매상태
 
 
+    @Builder
+    public Item(Long id, String itemName, int price, int stockNumber, String itemDetail, ItemSellStatus itemSellStatus) {
+        this.id = id;
+        this.itemName = itemName;
+        this.price = price;
+        this.stockNumber = stockNumber;
+        this.itemDetail = itemDetail;
+        this.itemSellStatus = itemSellStatus;
+    }
 
     public void updateItem(ItemFormDto itemFormDto){
 

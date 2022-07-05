@@ -18,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,10 +31,10 @@ public class ItemService {
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
 
-    public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
+    public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws IOException {
 
         //상품등록
-        Item item = itemFormDto.createItem(); // 상품 등록 폼으로부터 입력받은 데이터를 이용하여 item 객체를 생성
+        Item item = itemFormDto.createItem(itemFormDto); // 상품 등록 폼으로부터 입력받은 데이터를 이용하여 item 객체를 생성
         itemRepository.save(item); // 상품 데이터를 저장
 
         //이미지등록
@@ -41,9 +42,9 @@ public class ItemService {
             ItemImg itemImg = new ItemImg();
             itemImg.setItem(item);
             if(i == 0){
-                itemImg.setRepImgYn(StatusEnum.FLAG_Y.Value()); // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 "Y" 세팅, 나머지 상품 이미지는 "N"으로 설정
+                itemImg.setRepImgYn(StatusEnum.FLAG_Y.getValue()); // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 "Y" 세팅, 나머지 상품 이미지는 "N"으로 설정
             }else {
-                itemImg.setRepImgYn(StatusEnum.FLAG_N.Value());
+                itemImg.setRepImgYn(StatusEnum.FLAG_N.getValue());
             }
 
             if(!itemImgFileList.get(i).isEmpty()) {
@@ -72,6 +73,7 @@ public class ItemService {
         return itemFormDto;
     }
 
+    @Transactional
     public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
 
         //상품 수정
