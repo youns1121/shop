@@ -19,8 +19,6 @@ public class ItemImgDto { //상품 저장 후 상품 이미지에 대한 데이�
 
     private String repImgYn;
 
-    private static ModelMapper modelMapper = new ModelMapper(); //멤버 변수로 ModelMapper 객체를 추가
-
     public static ItemImgDto from(ItemImg itemImg){
 
         return ItemImgDto.builder()

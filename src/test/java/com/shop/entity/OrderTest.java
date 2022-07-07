@@ -52,26 +52,26 @@ class OrderTest {
         return item;
     }
 
-    public Order createOrder(){
-        Order order = new Order();
-
-        for(int i = 0; i<3; i++){
-            Item item = this.createItem();
-            itemRepository.save(item);
-            OrderItem orderItem = new OrderItem();
-            orderItem.setItem(item);
-            orderItem.setCount(10); //수량
-            orderItem.setOrderPrice(1000); //주문가격
-            orderItem.setOrder(order);
-            order.getOrderItemList().add(orderItem);
-        }
-        Member member = new Member();
-        memberRepository.save(member);
-
-        order.setMember(member);
-        orderRepository.save(order);
-        return order;
-    }
+//    public Order create(){
+//        Order order = new Order();
+//
+//        for(int i = 0; i<3; i++){
+//            Item item = this.createItem();
+//            itemRepository.save(item);
+//            OrderItem orderItem = new OrderItem();
+//            orderItem.setItem(item);
+//            orderItem.setCount(10); //수량
+//            orderItem.setOrderPrice(1000); //주문가격
+//            orderItem.setOrder(order);
+//            order.getOrderItemList().add(orderItem);
+//        }
+//        Member member = new Member();
+//        memberRepository.save(member);
+//
+//        order.setMember(member);
+//        orderRepository.save(order);
+//        return order;
+//    }
 
     @Test
     @DisplayName("영속성 전이 테스트")
@@ -99,34 +99,33 @@ class OrderTest {
 
     }
 
-    @Test
-    @DisplayName("고아객체 제거 테스트")
-    public void orphanRemovalTest(){
-        Order order = this.createOrder();
-        order.getOrderItemList().remove(0); // order 엔티티에서 관리하고 있는 orderItem 리스트의 0번째 인덱스 요소를 제거
-        em.flush();
+//    @Test
+//    @DisplayName("고아객체 제거 테스트")
+//    public void orphanRemovalTest(){
+//        Order order = this.create();
+//        order.getOrderItemList().remove(0); // order 엔티티에서 관리하고 있는 orderItem 리스트의 0번째 인덱스 요소를 제거
+//        em.flush();
+//    }
+//
+//    @Test
+//    @DisplayName("지연 로딩 테스트")
+//    public void lazyLodingTest(){
+//
+//        Order order = this.create();
+//        Long orderItemId = order.getOrderItemList().get(0).getId();
+//        em.flush();
+//        em.clear();
+
+//        OrderItem orderItem = orderItemRepository.findById(orderItemId) // 영속성 컨텍스트를 초기화 후 order 엔티티에 저장했던 주문 상품 아이디를 이용하여 orderItem을 DB에서 다시 조회
+//                .orElseThrow(EntityNotFoundException::new);
+//        System.out.println("Order class : " + orderItem.getOrder().getClass()); // orderItem 엔티티에 있는 order 객체의 클래스를 출력
+//        System.out.println("=============================");
+//        orderItem.getOrder().getOrderDate();
+//        System.out.println("=============================");
+
+
     }
 
-    @Test
-    @DisplayName("지연 로딩 테스트")
-    public void lazyLodingTest(){
-
-        Order order = this.createOrder();
-        Long orderItemId = order.getOrderItemList().get(0).getId();
-        em.flush();
-        em.clear();
-
-        OrderItem orderItem = orderItemRepository.findById(orderItemId) // 영속성 컨텍스트를 초기화 후 order 엔티티에 저장했던 주문 상품 아이디를 이용하여 orderItem을 DB에서 다시 조회
-                .orElseThrow(EntityNotFoundException::new);
-        System.out.println("Order class : " + orderItem.getOrder().getClass()); // orderItem 엔티티에 있는 order 객체의 클래스를 출력
-        System.out.println("=============================");
-        orderItem.getOrder().getOrderDate();
-        System.out.println("=============================");
-
-
-    }
 
 
 
-
-}

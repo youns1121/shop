@@ -50,7 +50,7 @@ public class OrderController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK); // 결과값으로 생성된 주문 번호와 요청이 성공했다는 HTTP응 답 상 태 코드를 반환
+        return new ResponseEntity<>(orderId, HttpStatus.OK); // 결과값으로 생성된 주문 번호와 요청이 성공했다는 HTTP응 답 상 태 코드를 반환
         }
 
         //구매이력 조회
@@ -70,7 +70,8 @@ public class OrderController {
     }
 
     @PostMapping("/order/{orderId}/cancel")
-    public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId, Principal principal){ // 주문 취소 권한 검사
+    @ResponseBody
+    public ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId, Principal principal){ // 주문 취소 권한 검사
 
         if(!orderService.validateOrder(orderId, principal.getName())){
 

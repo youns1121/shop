@@ -64,8 +64,7 @@ public class ItemFormDto {
                 .build();
     }
 
-    public static ItemFormDto of(Item item){
-//        return modelMapper.map(item, ItemFormDto.class); // modelMapper를 이용하여 엔티티 객체와 Dto 객체 간의 데이터를 복사하여 복사한 객체를 반횐해주는 메서드
+    public static ItemFormDto from(Item item){
 
         return ItemFormDto.builder()
                 .id(item.getId())

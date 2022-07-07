@@ -1,12 +1,11 @@
 package com.shop.domain;
 
 import com.shop.domain.comm.BaseEntity;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
+@NoArgsConstructor
 @EqualsAndHashCode(of="id")
 @Getter
 @Setter
@@ -33,16 +32,24 @@ public class OrderItem extends BaseEntity {
     @Column(name="order_count", nullable = false)
     private int count; //수량
 
-    public static OrderItem createOrderItem(Item item, int count){
+    @Builder
+    public OrderItem(Long id, Item item, Order order, int orderPrice, int count) {
+        this.id = id;
+        this.item = item;
+        this.order = order;
+        this.orderPrice = orderPrice;
+        this.count = count;
+    }
 
-        OrderItem orderItem = new OrderItem();
-        orderItem.setItem(item); // 주문할 상품
-        orderItem.setCount(count); // 주문 수량
-        orderItem.setOrderPrice(item.getPrice()); // 현재 시간 기준 상품 가격을 주문 가격으로 세팅, 상품 가격은 상황에 따라 달라짐 ex)쿠폰, 할인
+    public static OrderItem create(Item item, int count){
 
-        item.removeStock(count); // 주문 수량만큼 상품의 재고 수량을 감소
+        item.removeStock(count);
 
-        return orderItem;
+        return  OrderItem.builder()
+                .item(item)
+                .count(count)
+                .orderPrice(item.getPrice())
+                .build();
     }
 
     public int getTotalPrice(){ // 주문 가격과 주문 수량을 곱해서 해당 상품을 주문한 총 가격을 계산하는 메서드
@@ -55,6 +62,4 @@ public class OrderItem extends BaseEntity {
 
         this.getItem().addStock(count);
     }
-
-
 }

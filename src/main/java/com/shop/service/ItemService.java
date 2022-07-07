@@ -67,7 +67,7 @@ public class ItemService {
         }
 
         Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new); // 상품의 아이디를 통해 상품 엔티티를 조회합니다.
-        ItemFormDto itemFormDto = ItemFormDto.of(item);
+        ItemFormDto itemFormDto = ItemFormDto.from(item);
         itemFormDto.setItemImgDtoList(itemImgDtoList);
 
         return itemFormDto;

@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
-@AllArgsConstructor
+
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")
 @Setter
@@ -39,23 +38,29 @@ public class Order extends BaseEntity{
     @Column(name="order_status")
     private OrderStatus orderStatus;
 
+    @Builder
+    public Order(Long id, Member member, List<OrderItem> orderItemList, LocalDateTime orderDate, OrderStatus orderStatus) {
+        this.id = id;
+        this.member = member;
+        this.orderItemList = orderItemList;
+        this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+    }
+
     public void addOrderItem(OrderItem orderItem){// orderItems에는 주문 상품 정보들을 담아줌, orderItem 객체를 order 객체에 추가함
         orderItemList.add(orderItem);
         orderItem.setOrder(this); // Order 엔티티와 OrderItem 엔티티가 양방향 참조 관계, orderItem 객체에도 order 객체를 세팅
 
     }
 
-    public static Order createOrder(Member member, List<OrderItem> orderItemList){
+    public static Order create(Member member, List<OrderItem> orderItemList){
 
-        Order order = new Order();
-        order.setMember(member); // 상품을 주문한 회원 세팅
-        for(OrderItem orderItem : orderItemList){ // 상품 페이지에서는 1개의 상품을 주문, 장바구니 페이지에서는 한 번에 여러개 상품을 주문
-            order.addOrderItem(orderItem);
-        }
-        order.setOrderStatus(OrderStatus.ORDER); // 주문 상태를 Order로 세팅
-        order.setOrderDate(LocalDateTime.now()); // 현재 주문 시간
-
-        return order;
+        return Order.builder()
+                .member(member) // 상품을 주문한 회원 세팅
+                .orderItemList(orderItemList)  // 상품 페이지에서는 1개의 상품을 주문, 장바구니 페이지에서는 한 번에 여러개 상품을 주문
+                .orderStatus(OrderStatus.ORDER) //주문 상태를 Order로 세팅
+                .orderDate(LocalDateTime.now()) // 현재 주문 시간
+                .build();
     }
 
     public int getTotalPrice() {//총 주문 금액을 구하는 메서드

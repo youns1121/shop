@@ -145,7 +145,7 @@ public class CartService { // 장바구니에 상품을 담는 로직
     @Transactional
     public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String email){
 
-        Long orderId = createOrder(cartOrderDtoList, email);
+        Long orderId = create(cartOrderDtoList, email);
 
         deleteCartItem(cartOrderDtoList);
 
@@ -160,7 +160,7 @@ public class CartService { // 장바구니에 상품을 담는 로직
         }
     }
 
-    private Long createOrder(List<CartOrderDto> cartOrderDtoList, String email) {
+    private Long create(List<CartOrderDto> cartOrderDtoList, String email) {
         List<OrderDto> orderDtoList = new ArrayList<>();
         for (CartOrderDto cartOrderDto : cartOrderDtoList){
 
