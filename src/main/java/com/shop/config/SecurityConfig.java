@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests() //시큐리티 처리에 HttpSevletRequest를 이용
                 //perminAll()을 통해 모든 사용자가 인증(로그인)없이 해당 경로에 접근할 수 있도록 설정함, 메인 페이지, 회원관련 URL,
                 // 상품 상세페이지, 상품 이미지를 불러오는 경로에 해당
-                .mvcMatchers("/", "/members/**", "/item/**", "images/**").permitAll()
+                .mvcMatchers("/", "/members/**", "/item/**", "images/**", "/board/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN") //admin으로 시작하는 경로는 해당 계정이 ADMIN 일경우에만 접근 가능
                 .anyRequest().authenticated() // 나머지 경로들은 모두 인증을 요구하도록 설정
 
