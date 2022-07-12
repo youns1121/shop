@@ -8,6 +8,7 @@ import com.shop.domain.Item;
 import com.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class ItemController {
@@ -44,6 +46,7 @@ public class ItemController {
     public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, List<MultipartFile> itemImgFileList){
 
         if(bindingResult.hasErrors()){// 상품 등록 시 필수 값이 없다면 다시 상품 등록 페이지로 전환합니다.
+            log.info("errors={}", bindingResult);
             return "item/itemForm";
         }
 
@@ -102,7 +105,7 @@ public class ItemController {
 
     @GetMapping(value = {"/admin/items", "/admin/items/{page}"}) // value에 상품 관리 화면 진입 시 url에 페이지 번호가 없는 경우와 페이지 번호가 있는 경우 2가지를 매핑
     public String itemManage(ItemSearchDto itemSearchDto, @PathVariable("page") Optional<Integer> page, Model model){
-        Pageable pageable= PageRequest.of(page.isPresent() ? page.get(): 0, 3); // 첫 번째 파라미터로는 조회할 페이지 번호, 두 번째 파라미터로는 한 번에 가ㅣ지고 올 데이터 수, 페이지 번호가 없으면 0페이지를 조회
+        Pageable pageable= PageRequest.of(page.isPresent() ? page.get(): 0, 10); // 첫 번째 파라미터로는 조회할 페이지 번호, 두 번째 파라미터로는 한 번에 가ㅣ지고 올 데이터 수, 페이지 번호가 없으면 0페이지를 조회
         Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable); // 조회 조건과 페이징 정보를 파라미터로 넘겨서 Page<Item> 객체를 반환 받음
         model.addAttribute("items", items); // 조회한 상품 데이터 및 페이징 정보를 뷰에 전달
         model.addAttribute("itemSearchDto", itemSearchDto); // 페이지 전환 시 기존 검색 조건을 유지한 채 이동할 수 있도록 뷰에 다시 전달

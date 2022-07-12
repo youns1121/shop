@@ -1,12 +1,11 @@
 package com.shop.domain;
 
 import com.shop.domain.comm.BaseEntity;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
+@NoArgsConstructor
 @EqualsAndHashCode(of="id")
 @Setter
 @Getter
@@ -34,11 +33,20 @@ public class ItemImg extends BaseEntity { //상품이미지
     @JoinColumn(name = "item_id")
     private Item item;
 
+
     public void updateItemImg(String oriImgName, String imgName, String imgUrl){ //이미지 정보 업데이트 메서드
         this.oriImgName = oriImgName;
         this.imgName = imgName;
         this.imgUrl = imgUrl;
     }
 
-
+    @Builder
+    public ItemImg(Long id, String imgName, String oriImgName, String imgUrl, String repImgYn, Item item) {
+        this.id = id;
+        this.imgName = imgName;
+        this.oriImgName = oriImgName;
+        this.imgUrl = imgUrl;
+        this.repImgYn = repImgYn;
+        this.item = item;
+    }
 }

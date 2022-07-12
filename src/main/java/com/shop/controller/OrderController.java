@@ -28,8 +28,8 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping(value = "/order")
-    public @ResponseBody ResponseEntity order (@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult, Principal principal) {
-
+    @ResponseBody
+    public ResponseEntity<String> order (@Valid @RequestBody OrderDto orderDto, BindingResult bindingResult, Principal principal) {
 
         if (bindingResult.hasErrors()) { // 주문 정보를 받는 OrderDto 객체에 데이터 바인딩 시 에러가 있는지 검사
             StringBuilder sb = new StringBuilder();
@@ -37,7 +37,7 @@ public class OrderController {
             for (FieldError fieldError : fieldErrorList) {
                 sb.append(fieldError.getDefaultMessage());
             }
-            return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST); // 에러 정보를 ResponseEneity 객체에 담아서 반환
+            return new ResponseEntity<>(sb.toString(), HttpStatus.BAD_REQUEST); // 에러 정보를 ResponseEneity 객체에 담아서 반환
         }
 
 
@@ -47,10 +47,10 @@ public class OrderController {
         try {
             orderId = orderService.order(orderDto, email); // 화면으로부터 넘어오는 주문 정보와 회원의 이메일 정보를 이용하여 주문 로직을 호출
         } catch (Exception e){
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(orderId, HttpStatus.OK); // 결과값으로 생성된 주문 번호와 요청이 성공했다는 HTTP응 답 상 태 코드를 반환
+        return new ResponseEntity<>(orderId.toString(), HttpStatus.OK); // 결과값으로 생성된 주문 번호와 요청이 성공했다는 HTTP응 답 상 태 코드를 반환
         }
 
         //구매이력 조회
@@ -71,16 +71,16 @@ public class OrderController {
 
     @PostMapping("/order/{orderId}/cancel")
     @ResponseBody
-    public ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId, Principal principal){ // 주문 취소 권한 검사
+    public ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId, Principal principal){ // 주문 취소 권한 검사
 
         if(!orderService.validateOrder(orderId, principal.getName())){
 
-            return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 
         orderService.cancelOrder(orderId); // 주문 취소 로직 호출
 
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+        return new ResponseEntity<>(orderId.toString(), HttpStatus.OK);
     }
 
 

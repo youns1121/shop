@@ -4,10 +4,13 @@ package com.shop.domain;
 import com.shop.domain.comm.BaseEntity;
 import com.shop.dto.form.ItemFormDto;
 import com.shop.enums.ItemSellStatus;
+import com.shop.enums.StatusEnum;
 import com.shop.exception.OutOfStockException;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")
@@ -66,10 +69,8 @@ public class Item extends BaseEntity {
         this.stockNumber = restStock; // 주문 후 남은 재고 수량을 상품의 현재 재고 값으로 할당;
    }
 
-
     public void addStock(int stockNumber){  // 상품의 재고를 더해주는 메소드
 
         this.stockNumber += stockNumber;
     }
-
 }

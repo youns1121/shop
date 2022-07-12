@@ -38,7 +38,13 @@ public class ItemService {
         itemRepository.save(item); // 상품 데이터를 저장
 
         //이미지등록
-        for(int i=0; i<itemImgFileList.size(); i++){
+        createItemImages(itemImgFileList, item);
+        return item.getId();
+    }
+
+    private void createItemImages(List<MultipartFile> itemImgFileList, Item item) throws IOException {
+
+        for(int i = 0; i< itemImgFileList.size(); i++){
             ItemImg itemImg = new ItemImg();
             itemImg.setItem(item);
             if(i == 0){
@@ -47,11 +53,11 @@ public class ItemService {
                 itemImg.setRepImgYn(StatusEnum.FLAG_N.getValue());
             }
 
-            if(!itemImgFileList.get(i).isEmpty()) {
+            //비즈니스 로직 처리
+            if(! itemImgFileList.get(i).isEmpty()) {
                 itemImgService.saveItemImg(itemImg, itemImgFileList.get(i)); // 상품의 이미지 정보를 저장
             }
         }
-        return item.getId();
     }
 
     @Transactional(readOnly = true) // 상품 데이터를 읽어오는 트랜잭션을 읽기 전용 설정, jpa가 변경감지(더티체킹)을 수행하지 않아서 성능을 향상 시킬 수 있음

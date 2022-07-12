@@ -101,7 +101,8 @@ public class CartController {
 
     //장바구니 상품의 수량을 업데이트 하는 요청을 처리할 수 있도록 로직 추가
     @PostMapping(value = "/cart/orders")
-    public @ResponseBody ResponseEntity orderCartItem(@RequestBody CartOrderDto cartOrderDto, Principal principal){
+    @ResponseBody
+    public ResponseEntity<String> orderCartItem(@RequestBody CartOrderDto cartOrderDto, Principal principal){
 
         List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
 
@@ -118,7 +119,7 @@ public class CartController {
 
         Long orderId = cartService.orderCartItem(cartOrderDtoList, principal.getName()); // 주문 로직 호출 결과 생성된 주문 번호를 반환
 
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK); // 생성된 주문 번호와 요청이 생공했다는 HTTP 응답 상태 코드를 반환
+        return new ResponseEntity<String>(orderId.toString(), HttpStatus.OK); // 생성된 주문 번호와 요청이 생공했다는 HTTP 응답 상태 코드를 반환
 
     }
 
