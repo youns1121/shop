@@ -57,18 +57,6 @@
             }
         }
 
-
-        // function createBoard(){
-        //
-        //     $("#btn").unbind('click').bind('click', function() {
-        //
-        //         $("form").submit();
-        //         alert("작성이 완료되었습니다.")
-        //     });
-        // }
-
-
-
     </script>
 
 </th:block>
@@ -90,27 +78,19 @@
 
         <div class="input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text">작성자</span>
-            </div>
-            <a type="text" class="form-control" th:text="${member}" style="text-decoration: none"></a>
-
-        </div>
-
-        <div class="input-group">
-            <div class="input-group-prepend">
                 <span class="input-group-text">제목</span>
+
             </div>
-            <input type="text" class="form-control" th:field="*{boardTitle}" placeholder="제목을 입력해주세요"  maxlength='20'>
+            <input type="text" class="form-control" th:field="*{boardTitle}" placeholder="제목을 입력해주세요"   maxlength='20'>
             <div class="fieldError"  th:errors="*{boardTitle}" >Incorrect data</div>
         </div>
-
-
 
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text">내용</span>
             </div>
-            <textarea class="form-control" th:field="*{boardContents}" aria-label="With textarea" placeholder="내용을 입력해주세요" ></textarea>
+
+            <textarea class="form-control" th:field="*{boardContents}" aria-label="With textarea" ></textarea>
             <div class="fieldError" th:errors="*{boardContents}" >Incorrect data</div>
         </div>
 
@@ -132,7 +112,7 @@
         <div style="text-align: center">
             <button type="submit" class="btn btn-primary" id="btn" >저장</button>
 
-            <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-primary">취소</button>
+            <button th:href="@{/}" type="button" class="btn btn-primary">취소</button>
         </div>
 
 

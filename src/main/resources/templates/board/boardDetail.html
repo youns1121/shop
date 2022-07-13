@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+    .input-group {
+      margin-bottom : 15px
+    }
+    .fieldError {
+      color: #bd2130;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+
+  </style>
+</th:block>
+
+<div layout:fragment="content">
+  <form th:object="${board}" th:action method="get" enctype="multipart/form-data">
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">작성자</span>
+      </div>
+      <a type="text" class="form-control"  th:text="${board.boardWriter}" style="text-decoration: none"></a>
+    </div>
+
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">제목</span>
+      </div>
+      <a type="text" class="form-control" th:text="${board.boardTitle}" style="text-decoration: none"></a>
+    </div>
+
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">내용</span>
+      </div>
+      <a class="form-control" th:text="${board.boardContents}" style="text-decoration: none" ></a>
+    </div>
+
+    <div>
+
+      <div class="custom-file-detail">
+
+        <div  class="custom-file-detail" th:if="${#lists.size(boardFileList) ne 0}"></div>
+          <div th:each="boardFile : ${boardFileList}">
+            <a th:href="|/board/file/download/${boardFile.boardFileId}|"  th:text="${boardFile.boardFileName}" style="padding:1px 30px 3px 4px;"></a>
+            <span th:text="${#temporals.format(boardFile.createTime, 'yyyy-MM-dd HH:mm')}" ></span>
+          </div>
+      </div>
+      <div class="sub-img">
+      </div>
+    </div>
+
+    <br/>
+    <div style="text-align: center">
+      <button type="submit" class="btn btn-primary" id="btn" >수정</button>
+
+      <button th:href="@{/}" type="button" class="btn btn-primary">목록</button>
+    </div>
+
+  </form>
+</div>
+</html>

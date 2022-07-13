@@ -46,7 +46,7 @@ public class CartService { // 장바구니에 상품을 담는 로직
         Item item = itemRepository.findById(cartItemDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);// 장바구니에 담을 상품 엔티티를 조회
 
-        Member member = memberRepository.findByEmail(email); // 현재 로그인한 회원 엔티티 조회
+        Member member = getMember(email);
 
         Cart cart = cartRepository.findByMemberId(member.getId());// 현재 로그인한 회원의 장바구니 엔티티 조회
 
@@ -82,7 +82,7 @@ public class CartService { // 장바구니에 상품을 담는 로직
 
         List<CartDetailDto> cartDetailDtoList =  Collections.emptyList();
 
-        Member member = memberRepository.findByEmail(email);
+        Member member = getMember(email);
 
         Cart cart = cartRepository.findByMemberId(member.getId());
 
@@ -105,7 +105,7 @@ public class CartService { // 장바구니에 상품을 담는 로직
     @Transactional(readOnly = true)
     public boolean validateCartItem(Long cartItemId, String email) {
 
-        Member curMember = memberRepository.findByEmail(email); // 현재 로그인한 회원을 조회
+        Member curMember = getMember(email);
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
 
         Member savedMember = cartItem.getCart().getMember(); // 장바구니 상품을 저장한 회원을 조회
@@ -115,6 +115,11 @@ public class CartService { // 장바구니에 상품을 담는 로직
         }
 
         return true;
+    }
+
+    private Member getMember(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("로그인을 해주세요"));
     }
 
     /**

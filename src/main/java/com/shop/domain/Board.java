@@ -1,7 +1,9 @@
 package com.shop.domain;
 
 import com.shop.domain.comm.BaseEntity;
-import com.shop.dto.BoardCreateDto;
+import com.shop.dto.BoardUpdateDto;
+import com.shop.dto.form.BoardFormDto;
+import com.shop.enums.StatusEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,32 +31,38 @@ public class Board extends BaseEntity {
     private String delYn;
 
     @OneToMany(mappedBy = "board")
-    @ToString.Exclude
-    private List<BoardImg> boardImgList;
+    private List<BoardFile> boardFileList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    @ToString.Exclude
     private Member member;
 
 
     @Builder
-    public Board(Long boardId, String boardTitle, String boardContents, String delYn, List<BoardImg> boardImgList, Member member) {
+    public Board(Long boardId, String boardTitle, String boardContents, String delYn, List<BoardFile> boardFileList, Member member) {
         this.boardId = boardId;
         this.boardTitle = boardTitle;
         this.boardContents = boardContents;
         this.delYn = delYn;
-        this.boardImgList = boardImgList;
+        this.boardFileList = boardFileList;
         this.member = member;
     }
 
-        public static Board create(BoardCreateDto boardCreateDto){
 
+
+    public static Board create(BoardFormDto boardFormDto){
 
         return Board.builder()
-                .boardTitle(boardCreateDto.getBoardTitle())
-                .boardContents(boardCreateDto.getBoardContents())
-                .delYn(boardCreateDto.getDelYn())
+                .boardTitle(boardFormDto.getBoardTitle())
+                .boardContents(boardFormDto.getBoardContents())
+                .member(boardFormDto.getMember())
+                .delYn(StatusEnum.FLAG_N.getStatusMessage())
                 .build();
+    }
+
+    public void update(BoardUpdateDto boardUpdateDto){
+
+        this.boardTitle = boardUpdateDto.getBoardTitle();
+        this.boardContents = boardUpdateDto.getBoardContents();
     }
 }

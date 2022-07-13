@@ -36,7 +36,7 @@ public class OrderService {
         Item item = itemRepository.findById(orderDto.getItemId()) //주문 할 상품을 조회
                 .orElseThrow(EntityExistsException::new);
 
-        Member member = memberRepository.findByEmail(email); // 현재 로그인한 회원의 이메일 정보를 이용해서 회원 정보를 조회
+        Member member = getMember(email);
 
         List<OrderItem> orderItemList = new ArrayList<>();
         OrderItem orderItem = OrderItem.create(item, orderDto.getCount()); // 주문할 상품 엔티티와 주문 수량을 이용하여 주문 상품 엔티티를 생성
@@ -50,6 +50,11 @@ public class OrderService {
         orderItem.setOrder(order);
 
         return order.getId();
+    }
+
+    private Member getMember(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("로그인 후 이용해주세요"));
     }
 
     //주문목록 조회 로직
@@ -80,7 +85,8 @@ public class OrderService {
     @Transactional(readOnly = true)
     public boolean validateOrder(Long orderId, String email){ //현재 로그인한 사용자와 주문 데이터를 생성한 사용자가 같은지 검사
 
-        Member curMember = memberRepository.findByEmail(email);
+        Member curMember = getMember(email);
+
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(EntityExistsException::new);
         Member savedMember = order.getMember();
@@ -108,7 +114,7 @@ public class OrderService {
     // 장바구니에서 주문 생성
     public Long orders(List<OrderDto> orderDtoList, String email){
 
-        Member member = memberRepository.findByEmail(email);
+        Member member = getMember(email);
 
         List<OrderItem> orderItemList = new ArrayList<>();
 

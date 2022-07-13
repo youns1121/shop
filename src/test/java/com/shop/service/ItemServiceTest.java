@@ -39,7 +39,7 @@ class ItemServiceTest {
 
         for (int i = 0; i < 5; i++) {
 
-            String path = "D:/shop/item";
+            String path = "C:/img";
             String imageName = "image" + i + ".jpg";
             MockMultipartFile multipartFile = new MockMultipartFile(path, imageName, "image/jpg", new byte[]{1, 2, 3, 4});
 

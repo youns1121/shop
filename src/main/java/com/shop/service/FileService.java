@@ -13,6 +13,10 @@ import java.util.UUID;
 @Log
 public class FileService {
 
+    public String getFileFullPath(String fileName, String uploadPath){
+        return uploadPath + fileName;
+    }
+
     public String uploadFile(String uploadPath, String originalFileName, byte[] fileDate) throws IOException {
 
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
