@@ -3,7 +3,38 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
 
+<th:block layout:fragment="script">
+
+  <script th:inline="javascript">
+
+  function deleteBoardFn(id){
+
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+
+    let idValue = {id : id }
+    $.ajax({
+      type: 'POST',
+      beforeSend : function(xhr){
+        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+        xhr.setRequestHeader(header, token);
+      },
+      url: '/board/delete/'+id,
+      data: idValue,
+      success: function (){
+        alert("삭제 완료되었습니다.")
+        location.href='/'
+      }
+    })
+  }
+
+  </script>
+</th:block>
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -53,23 +84,23 @@
 
       <div class="custom-file-detail">
 
-        <div  class="custom-file-detail" th:if="${#lists.size(boardFileList) ne 0}"></div>
+        <div  class="custom-file-detail" th:if="${#lists.size(boardFileList) ne 0}">
           <div th:each="boardFile : ${boardFileList}">
             <a th:href="|/board/file/download/${boardFile.boardFileId}|"  th:text="${boardFile.boardFileName}" style="padding:1px 30px 3px 4px;"></a>
             <span th:text="${#temporals.format(boardFile.createTime, 'yyyy-MM-dd HH:mm')}" ></span>
           </div>
-      </div>
+        </div>
       <div class="sub-img">
       </div>
     </div>
 
     <br/>
-    <div style="text-align: center">
-      <button type="submit" class="btn btn-primary" id="btn" >수정</button>
-
-      <button th:href="@{/}" type="button" class="btn btn-primary">목록</button>
+      <div style="text-align: center">
+        <button th:onclick="|location.href='@{/board/update/}${board.boardId}'|" type="button" class="btn btn-primary" id="btn">수정</button>
+        <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-primary">목록</button>
+        <button type="button" th:onclick="|deleteBoardFn('${board.boardId}')|" class="btn btn-primary" id="delete">삭제</button>
+      </div>
     </div>
-
   </form>
 </div>
 </html>

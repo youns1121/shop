@@ -65,4 +65,9 @@ public class Board extends BaseEntity {
         this.boardTitle = boardUpdateDto.getBoardTitle();
         this.boardContents = boardUpdateDto.getBoardContents();
     }
+
+    public void delete(Board board){
+
+        board.delYn = StatusEnum.FLAG_Y.getValue();
+    }
 }

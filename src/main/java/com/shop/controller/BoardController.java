@@ -102,14 +102,23 @@ public class BoardController {
         return "board/boardUpdate";
     }
 
-    @PostMapping("/update")
-    public String updateBoard(@ModelAttribute("board") BoardUpdateDto boardUpdateDto){
+    @PostMapping("/update/{id}")
+    public String updateBoard(@PathVariable("id") Long id, BoardUpdateDto boardUpdateDto){
 
-        boardService.updateBoard(boardUpdateDto);
 
-        return "redirect:/board/detail/"+boardUpdateDto.getBoardId();
+
+        boardService.updateBoard(boardUpdateDto, id);
+
+        return "redirect:/board/detail/"+id;
     }
 
+
+    @PostMapping("/delete/{id}")
+    @ResponseBody
+    public void deleteBoard(@PathVariable("id") String id){
+
+        boardService.deleteBoard(id);
+    }
 
 
     @GetMapping("/file/download/{id}")

@@ -8,6 +8,7 @@ import com.shop.dto.BoardUpdateDto;
 import com.shop.dto.form.BoardFormDto;
 import com.shop.dto.response.BoardResponseDto;
 import com.shop.enums.StatusEnum;
+import com.shop.repository.BoardFileRepository;
 import com.shop.repository.BoardRepository;
 import com.shop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ import java.util.*;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardFileRepository boardFileRepository;
     private final MemberRepository memberRepository;
-    private final MemberService memberService;
 
 
     @Transactional
@@ -40,9 +41,9 @@ public class BoardService {
     }
 
     @Transactional
-    public void updateBoard(BoardUpdateDto boardUpdateDto){
+    public void updateBoard(BoardUpdateDto boardUpdateDto, Long id){
 
-        Board board = boardRepository.findById(boardUpdateDto.getBoardId())
+        Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다"));
 
         board.update(boardUpdateDto);
@@ -55,7 +56,6 @@ public class BoardService {
         }
 
     }
-
 
     @Transactional(readOnly = true)
     public BoardResponseDto getBoardDetail(String boardId){
@@ -70,7 +70,6 @@ public class BoardService {
             boardFileDtoList = getBoardFileDtoList(board);
         }
 
-
         return BoardResponseDto.of(board, boardFileDtoList);
     }
 
@@ -84,5 +83,29 @@ public class BoardService {
         }
 
         return boardFileDtoList;
+    }
+
+    @Transactional
+    public void deleteBoard(String id){
+
+        Board board = boardRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시판입니다."));
+
+        if(!CollectionUtils.isEmpty(board.getBoardFileList())){
+            deleteFile(board);
+        }
+        board.delete(board);
+
+
+    }
+
+    private void deleteFile(Board board) {
+        for(BoardFile boardFile : board.getBoardFileList()){
+
+            BoardFile file = boardFileRepository.findById(boardFile.getBoardFileId())
+                    .orElseThrow(() -> new EntityNotFoundException("파일이 존재하지 않습니다"));
+
+            boardFileRepository.delete(file);
+        }
     }
 }
