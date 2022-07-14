@@ -3,6 +3,11 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
@@ -34,16 +39,18 @@
         function addFile(){
 
             let htmlData = '';
-            htmlData += '<div class="custom-file img-div">'
-            htmlData += '<input type="file" class="custom-file-input" name="boardFileList">'
-            htmlData += '<label class="custom-file-label"></label>'
+            htmlData += '<div class="sub-img">'
+            htmlData +=     '<div class="custom-file img-div">'
+            htmlData +=     '<input type="file" class="custom-file-input" name="boardFileList">'
+            htmlData +=     '<label class="custom-file-label"></label>'
+            htmlData +=     '</div>'
             htmlData += '</div>'
 
-            let fileSize = $('.custom-file.img-div').length + $(".custom-file-detail").length
+            let fileSize = $('.custom-file.img-div').length + $(".file-detail-list").length
 
             if(fileSize < 5) {
 
-                $('.sub-img').append(htmlData)
+                $('.img-list').append(htmlData)
             } else {
                 alert("첨부파일 갯수는 최대 5개 입니다.")
             }
@@ -53,8 +60,59 @@
 
             let fileSize = $('.custom-file.img-div').length
             if( fileSize > 1) {
-                $('.custom-file.img-div:last').remove()
+                $('.sub-img:last').remove()
             }
+        }
+
+
+        function updateBoardFn(val){
+
+            let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
+
+            let arr = [];
+
+            $('.fileIdList').each(function(i, obj) {
+                arr[i] = $(obj).data('fileid');
+            });
+
+            let formData = new FormData();
+
+            formData.append('boardId', [[${board.boardId}]])
+            formData.append('boardTitle', $('#boardTitle').val())
+            formData.append('boardContents', $('#boardContents').val())
+            formData.append('fileIdList', arr)
+            let inputFile = $("input[type='file']")
+            let inputFileLength = inputFile.length
+
+
+            for(var i = 0;  i < inputFileLength; i++){
+                if(!(inputFile[i].value == "")){
+                    formData.append('boardFileList', inputFile[i].files[0])
+                }
+            }
+
+            $.ajax({
+                url : "/board/update/" + val,
+                type : "POST",
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                enctype: 'multipart/form-data',
+                contentType: false,
+                processData: false,
+                cache: false,
+                data     : formData,
+                success  : function (){
+                    location.href = '/board/detail/' + val
+                }
+
+            })
+        }
+
+        function deleteFn(val){
+            $(val).parents(".file-detail-list").remove()
         }
 
     </script>
@@ -75,6 +133,14 @@
 
 <div layout:fragment="content">
     <form th:object="${board}" th:action method="post" enctype="multipart/form-data">
+
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">작성자</span>
+            </div>
+            <a type="text" class="form-control"  th:text="${board.boardWriter}" style="text-decoration: none"></a>
+        </div>
 
         <div class="input-group">
             <div class="input-group-prepend">
@@ -101,25 +167,29 @@
                 <button type="button" onclick="removeFile()">-</button>
             </div>
 
-            <div class="sub-img">
-
-            </div>
-            <div class="custom-file img-div">
-                <input type="file" class="custom-file-input" name="boardFileList" placeholder="첨부파일">
-                <label class="custom-file-label"></label>
+            <div class="img-list">
+                <div class="custom-file img-div">
+                    <input type="file" class="custom-file-input" name="boardFileList" placeholder="첨부파일">
+                    <label class="custom-file-label"></label>
+                </div>
             </div>
             <div  class="custom-file-detail" th:if="${#lists.size(boardFileList) ne 0}">
-                <div th:each="boardFile : ${boardFileList}">
-                    <a th:href="|/board/file/download/${boardFile.boardFileId}|"  th:text="${boardFile.boardFileName}" style="padding:1px 30px 3px 4px;"></a>
+                <div class="file-detail-list" th:field="*{fileIdList}" th:each="boardFile : ${boardFileList}" >
+                    <a
+                            th:href="|/board/file/download/${boardFile.boardFileId}|"  th:text="${boardFile.boardFileName}" style="padding:1px 30px 3px 4px;"
+                            class ="fileIdList"
+                            th:data-fileId="${boardFile.boardFileId}"
+                    >
+                    </a>
                     <span th:text="${#temporals.format(boardFile.createTime, 'yyyy-MM-dd HH:mm')}" ></span>
-                    <button type="button" class="btn btn-primary" id="delete" >삭제</button>
+                    <button type="button" class="btn btn-primary" id="delete" onclick="deleteFn(this)" style="background-color: red" >삭제</button>
                 </div>
             </div>
         </div>
 
         <br/>
         <div style="text-align: center">
-            <button th:formaction="|@{/board/update/}${board.boardId}|" type="submit" class="btn btn-primary" id="btn" >저장</button>
+            <button  th:onclick="|updateBoardFn(${board.boardId})|"   type="button" class="btn btn-primary" id="btn" >저장</button>
 
             <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-primary">취소</button>
         </div>

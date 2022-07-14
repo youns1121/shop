@@ -39,7 +39,7 @@ public class BoardFormDto {
         this.member = member;
     }
 
-    private static BoardFormDto from(Board board){
+    public static BoardFormDto from(Board board){
 
         return BoardFormDto.builder()
                 .boardTitle(board.getBoardTitle())

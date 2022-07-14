@@ -7,10 +7,10 @@
 
     <script th:inline="javascript">
         $(document).ready(function(){
-            var errorMessage = [[${errorMessage}]];
-            if(errorMessage != null){
-                alert(errorMessage);
-            }
+            // var errorMessage = [[${errorMessage}]];
+            // if(errorMessage != null){
+            //     alert(errorMessage);
+            // }
 
             bindDomEvent();
 
@@ -86,7 +86,7 @@
 </th:block>
 
 <div layout:fragment="content">
-    <form th:object="${board}" th:action method="post" enctype="multipart/form-data">
+    <form th:object="${board}" method="post" th:action enctype="multipart/form-data">
 
         <div class="input-group">
             <div class="input-group-prepend">
@@ -101,7 +101,6 @@
                 <span class="input-group-text">제목</span>
             </div>
             <input type="text" class="form-control" th:field="*{boardTitle}" placeholder="제목을 입력해주세요"  maxlength='20'>
-            <div class="fieldError"  th:errors="*{boardTitle}" >Incorrect data</div>
         </div>
 
 
@@ -111,7 +110,6 @@
                 <span class="input-group-text">내용</span>
             </div>
             <textarea class="form-control" th:field="*{boardContents}" aria-label="With textarea" placeholder="내용을 입력해주세요" ></textarea>
-            <div class="fieldError" th:errors="*{boardContents}" >Incorrect data</div>
         </div>
 
 
@@ -131,13 +129,9 @@
         <br/>
         <div style="text-align: center">
             <button type="submit" class="btn btn-primary" id="btn" >저장</button>
-
             <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-primary">취소</button>
         </div>
 
-
-
-<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
     </form>
 </div>
 </html>

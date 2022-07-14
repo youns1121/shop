@@ -36,6 +36,15 @@ public class BoardController {
     private final BoardFileService boardFileService;
     private final MemberService memberService;
 
+    @GetMapping("list")
+    public String listBoard(Model model){
+
+
+        model.addAttribute("boardList");
+
+        return "board/boardList";
+    }
+
     @GetMapping("/new")
     public String createBoard(Model model, Principal principal){
 
@@ -44,20 +53,19 @@ public class BoardController {
         model.addAttribute("member", member.getName());
 
         model.addAttribute("board", new BoardFormDto());
+
         return "board/boardForm";
     }
 
-
-
     @PostMapping("/new")
-    public String createBoard(@Validated @ModelAttribute("board") BoardFormDto boardFormDto,
-                              List<MultipartFile> boardFileList,
+    @ResponseBody
+    public String createBoard(@Validated @ModelAttribute("board") BoardFormDto boardFormDto, List<MultipartFile> boardFileList,
                               BindingResult bindingResult, Principal principal) throws IOException {
-
 
         if (bindingResult.hasErrors()) {
 
             log.info("errors={}", bindingResult);
+
             return "board/boardForm";
         }
 
@@ -66,15 +74,14 @@ public class BoardController {
         if(!CollectionUtils.isEmpty(boardFileList)) {
 
             boardFormDto.setBoard(board);
-            boardFileService.storeFiles(boardFileList, boardFormDto);
+            boardFileService.storeFiles(boardFileList, board);
         }
 
-
-        return "redirect:/";
+        return "redirect:/board/detail/"+ board.getBoardId();
     }
 
     @GetMapping("/detail/{id}")
-    public String detailBoard(@PathVariable("id") String id, Model model){
+    public String detailBoard(@PathVariable("id") Long id, Model model){
 
         BoardResponseDto findBoardDetail = boardService.getBoardDetail(id);
 
@@ -84,17 +91,14 @@ public class BoardController {
         return "board/boardDetail";
     }
 
-
     @GetMapping("/update/{id}")
-    public String updateBoard(@PathVariable("id") String id, Model model, Principal principal){
-
+    public String updateBoard(@PathVariable("id") Long id, Model model, Principal principal){
 
         Member member = memberService.getMember(principal.getName());
 
         BoardResponseDto findBoardDetail = boardService.getBoardDetail(id);
 
         boardService.memberBoardCheck(member.getId(), findBoardDetail.getMemberId());
-
 
         model.addAttribute("board", findBoardDetail);
         model.addAttribute("boardFileList", findBoardDetail.getBoardFileDtoList());
@@ -103,23 +107,22 @@ public class BoardController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateBoard(@PathVariable("id") Long id, BoardUpdateDto boardUpdateDto){
+    @ResponseBody
+    public String updateBoard(@PathVariable("id") Long id, @ModelAttribute("board") BoardUpdateDto boardUpdateDto,
+                              List<MultipartFile> boardFileList) throws IOException {
 
-
-
-        boardService.updateBoard(boardUpdateDto, id);
+        Board board = boardService.updateBoard(boardUpdateDto, id);
+        boardFileService.updateBoardFile(board,boardFileList, boardUpdateDto.getFileIdList());
 
         return "redirect:/board/detail/"+id;
     }
 
-
     @PostMapping("/delete/{id}")
     @ResponseBody
-    public void deleteBoard(@PathVariable("id") String id){
+    public void deleteBoard(@PathVariable("id") Long id){
 
         boardService.deleteBoard(id);
     }
-
 
     @GetMapping("/file/download/{id}")
     public ResponseEntity<String> fileDownload(@PathVariable("id") String id) throws MalformedURLException {

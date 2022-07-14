@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class BoardUpdateDto {
@@ -15,16 +17,13 @@ public class BoardUpdateDto {
 
     private String boardContents;
 
-    private String memberEmail;
-
-    private Member member;
+    private List<Long> fileIdList;
 
     @Builder
-    public BoardUpdateDto(Long boardId, String boardTitle, String boardContents, String memberEmail, Member member) {
+    public BoardUpdateDto(Long boardId, String boardTitle, String boardContents, List<Long> fileIdList) {
         this.boardId = boardId;
         this.boardTitle = boardTitle;
         this.boardContents = boardContents;
-        this.memberEmail = memberEmail;
-        this.member = member;
+        this.fileIdList = fileIdList;
     }
 }

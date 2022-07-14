@@ -27,12 +27,14 @@ public class BoardResponseDto {
 
     private List<BoardFileDto> boardFileDtoList;
 
+    private List<Long> fileIdList;
+
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
 
     @Builder
-    public BoardResponseDto(Long boardId, Long memberId, String boardWriter, String boardTitle, String boardContents, String delYn, List<BoardFileDto> boardFileDtoList, LocalDateTime createTime, LocalDateTime updateTime) {
+    public BoardResponseDto(Long boardId, Long memberId, String boardWriter, String boardTitle, String boardContents, String delYn, List<BoardFileDto> boardFileDtoList, List<Long> fileIdList, LocalDateTime createTime, LocalDateTime updateTime) {
         this.boardId = boardId;
         this.memberId = memberId;
         this.boardWriter = boardWriter;
@@ -40,6 +42,7 @@ public class BoardResponseDto {
         this.boardContents = boardContents;
         this.delYn = delYn;
         this.boardFileDtoList = boardFileDtoList;
+        this.fileIdList = fileIdList;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }

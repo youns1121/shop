@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="script">
+
+  <script th:inline="javascript">
+
+
+  </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+    .input-group {
+      margin-bottom : 15px
+    }
+    .fieldError {
+      color: #bd2130;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+
+  </style>
+</th:block>
+
+<div layout:fragment="content">
+  <form th:object="${boardList}" th:action method="get">
+
+    <table class="table">
+      <thead>
+        <tr>
+          <td>번호</td>
+          <td>제목</td>
+          <td>내용</td>
+          <td>작성자</td>
+          <td>작성 날짜</td>
+        </tr>
+      </thead>
+      <tbody>
+      <td>번호</td>
+      <td>제목</td>
+      <td>내용</td>
+      <td>작성자</td>
+      <td>작성 날짜</td>
+
+      </tbody>
+
+
+    </table>
+
+
+  </form>
+</div>
+</html>

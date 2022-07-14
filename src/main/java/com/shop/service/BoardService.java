@@ -27,7 +27,6 @@ public class BoardService {
     private final BoardFileRepository boardFileRepository;
     private final MemberRepository memberRepository;
 
-
     @Transactional
     public Board createBoard(BoardFormDto boardFormDto, String memberName){
 
@@ -41,12 +40,14 @@ public class BoardService {
     }
 
     @Transactional
-    public void updateBoard(BoardUpdateDto boardUpdateDto, Long id){
+    public Board updateBoard(BoardUpdateDto boardUpdateDto, Long id){
 
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다"));
 
         board.update(boardUpdateDto);
+
+        return board;
     }
 
     public void memberBoardCheck(Long memberId, Long boardMemberId){
@@ -54,13 +55,12 @@ public class BoardService {
         if(!memberId.equals(boardMemberId)){
             throw new EntityNotFoundException("잘못된 접근입니다.");
         }
-
     }
 
     @Transactional(readOnly = true)
-    public BoardResponseDto getBoardDetail(String boardId){
+    public BoardResponseDto getBoardDetail(Long boardId){
 
-        Board board = boardRepository.findByBoardIdAndDelYn(Long.valueOf(boardId), StatusEnum.FLAG_N.getStatusMessage())
+        Board board = boardRepository.findByBoardIdAndDelYn((boardId), StatusEnum.FLAG_N.getStatusMessage())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
 
         List<BoardFileDto> boardFileDtoList = Collections.emptyList();
@@ -86,9 +86,9 @@ public class BoardService {
     }
 
     @Transactional
-    public void deleteBoard(String id){
+    public void deleteBoard(Long id){
 
-        Board board = boardRepository.findById(Long.valueOf(id))
+        Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시판입니다."));
 
         if(!CollectionUtils.isEmpty(board.getBoardFileList())){
