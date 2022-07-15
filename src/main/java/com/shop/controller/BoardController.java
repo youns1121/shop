@@ -27,6 +27,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Slf4j
+@ControllerAdvice
 @RequiredArgsConstructor
 @RequestMapping("/board")
 @Controller
@@ -36,11 +37,10 @@ public class BoardController {
     private final BoardFileService boardFileService;
     private final MemberService memberService;
 
-    @GetMapping("list")
+    @GetMapping("/list")
     public String listBoard(Model model){
 
-
-        model.addAttribute("boardList");
+        model.addAttribute("boardList", boardService.getBoardList());
 
         return "board/boardList";
     }
@@ -48,7 +48,7 @@ public class BoardController {
     @GetMapping("/new")
     public String createBoard(Model model, Principal principal){
 
-        Member member = memberService.getMember(principal.getName());
+        Member member = memberService.getMember(principal);
 
         model.addAttribute("member", member.getName());
 
@@ -58,7 +58,6 @@ public class BoardController {
     }
 
     @PostMapping("/new")
-    @ResponseBody
     public String createBoard(@Validated @ModelAttribute("board") BoardFormDto boardFormDto, List<MultipartFile> boardFileList,
                               BindingResult bindingResult, Principal principal) throws IOException {
 
@@ -81,7 +80,7 @@ public class BoardController {
     }
 
     @GetMapping("/detail/{id}")
-    public String detailBoard(@PathVariable("id") Long id, Model model){
+    public String detailBoard(@PathVariable("id") long id, Model model){
 
         BoardResponseDto findBoardDetail = boardService.getBoardDetail(id);
 
@@ -94,7 +93,7 @@ public class BoardController {
     @GetMapping("/update/{id}")
     public String updateBoard(@PathVariable("id") Long id, Model model, Principal principal){
 
-        Member member = memberService.getMember(principal.getName());
+        Member member = memberService.getMember(principal);
 
         BoardResponseDto findBoardDetail = boardService.getBoardDetail(id);
 
@@ -112,7 +111,7 @@ public class BoardController {
                               List<MultipartFile> boardFileList) throws IOException {
 
         Board board = boardService.updateBoard(boardUpdateDto, id);
-        boardFileService.updateBoardFile(board,boardFileList, boardUpdateDto.getFileIdList());
+        boardFileService.updateBoardFile(board, boardFileList, boardUpdateDto.getFileIdList());
 
         return "redirect:/board/detail/"+id;
     }
@@ -124,14 +123,15 @@ public class BoardController {
         boardService.deleteBoard(id);
     }
 
+    @ResponseBody
     @GetMapping("/file/download/{id}")
     public ResponseEntity<String> fileDownload(@PathVariable("id") String id) throws MalformedURLException {
 
         BoardFileDownloadDto downloadFileInfo = boardFileService.downloadBoardFile(id);
 
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, downloadFileInfo.getContentDisposition())
                 .body(downloadFileInfo.getResource());
     }
-
 }

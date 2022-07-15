@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -47,6 +49,28 @@ public class BoardResponseDto {
         this.updateTime = updateTime;
     }
 
+    public static List<BoardResponseDto> from(List<Board> boardList){
+
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+
+        for(Board board : boardList) {
+           boardResponseDtoList.add(
+                   BoardResponseDto.builder()
+                    .boardId(board.getBoardId())
+                    .memberId(board.getMember().getId())
+                    .boardWriter(board.getMember().getName())
+                    .boardTitle(board.getBoardTitle())
+                    .boardContents(board.getBoardContents())
+                    .createTime(board.getCreateTime())
+                    .updateTime(board.getUpdateTime())
+                    .delYn(board.getDelYn())
+                    .build()
+           );
+        }
+
+        return boardResponseDtoList;
+    }
+
     public static BoardResponseDto of(Board board, List<BoardFileDto> boardFileDtoList){
 
         return BoardResponseDto.builder()
@@ -58,5 +82,9 @@ public class BoardResponseDto {
                 .boardFileDtoList(boardFileDtoList)
                 .delYn(board.getDelYn())
                 .build();
+    }
+
+    public List<BoardFileDto> getBoardFileDtoList() {
+        return boardFileDtoList == null ? Collections.emptyList() : boardFileDtoList;
     }
 }

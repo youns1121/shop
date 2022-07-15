@@ -19,6 +19,14 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+  error:
+    include-exception: true
+    include-message: on_param # 파라미터가 있을 때 사용
+    include-stacktrace: on_param
+    include-binding-errors: on_param
+    whitelabel:
+      enabled: true # 오류 처리 화면을 못 찾을 시, 스프링 whitelabel 오류 페이지 적용
+    path: /error
 
 
 custom:
@@ -55,7 +63,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/shop?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/shop?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: root
     password: wjdqhqhdks
 

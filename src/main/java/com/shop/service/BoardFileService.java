@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystemNotFoundException;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -35,21 +36,22 @@ public class BoardFileService {
     @Transactional
     public void updateBoardFile(Board board, List<MultipartFile> boardFileList, List<Long> fileIdList) throws IOException {
 
-        fileDuplicateCheck(boardFileList, fileIdList, board);
+        List<BoardFile> findBoardFileList = getBoardFileList(board);
+
+        notExistFileDelete(fileIdList, findBoardFileList);
+
+        if(! CollectionUtils.isEmpty(boardFileList)) {
+            storeFiles(boardFileList, board);
+        }
     }
 
-    private void fileDuplicateCheck(List<MultipartFile> boardFileList, List<Long> fileIdList, Board board) throws IOException {
+    private void notExistFileDelete(List<Long> fileIdList, List<BoardFile> findBoardFileList) {
 
-        List<BoardFile> findBoardFileList = getBoardFileList(board);
-        for(int i = 0; i < findBoardFileList.size(); i++){
-            if(!fileIdList.contains(findBoardFileList.get(i).getBoardFileId())) {
+        for (BoardFile boardFile : findBoardFileList) {
+            if (! fileIdList.contains(boardFile.getBoardFileId())) {
 
-                boardFileRepository.delete(findBoardFileList.get(i));
+                boardFileRepository.delete(boardFile);
             }
-        }
-
-         if(!CollectionUtils.isEmpty(boardFileList)) {
-            storeFiles(boardFileList, board);
         }
     }
 
@@ -116,8 +118,9 @@ public class BoardFileService {
     }
 
     public BoardFileDownloadDto downloadBoardFile(String fileId) throws MalformedURLException {
+
         BoardFile boardFile = boardFileRepository.findById(Long.valueOf(fileId))
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 파일입니다."));
+                .orElseThrow(() -> new FileSystemNotFoundException("존재하지 않는 파일입니다."));
 
         String storeFileName = boardFile.getBoardFileStoreName() + "." + boardFile.getBoardFileExtension();
         String uploadFileName = boardFile.getBoardFileName();

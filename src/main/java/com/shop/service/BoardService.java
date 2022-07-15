@@ -8,6 +8,8 @@ import com.shop.dto.BoardUpdateDto;
 import com.shop.dto.form.BoardFormDto;
 import com.shop.dto.response.BoardResponseDto;
 import com.shop.enums.StatusEnum;
+import com.shop.global.error.exception.BoardNotFoundException;
+import com.shop.global.error.exception.ErrorCode;
 import com.shop.repository.BoardFileRepository;
 import com.shop.repository.BoardRepository;
 import com.shop.repository.MemberRepository;
@@ -43,7 +45,7 @@ public class BoardService {
     public Board updateBoard(BoardUpdateDto boardUpdateDto, Long id){
 
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다"));
+                .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND.getMessage()));
 
         board.update(boardUpdateDto);
 
@@ -61,7 +63,7 @@ public class BoardService {
     public BoardResponseDto getBoardDetail(Long boardId){
 
         Board board = boardRepository.findByBoardIdAndDelYn((boardId), StatusEnum.FLAG_N.getStatusMessage())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
+                .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND.getMessage()));
 
         List<BoardFileDto> boardFileDtoList = Collections.emptyList();
 
@@ -71,6 +73,12 @@ public class BoardService {
         }
 
         return BoardResponseDto.of(board, boardFileDtoList);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardResponseDto> getBoardList(){
+
+        return BoardResponseDto.from(boardRepository.findByDelYn(StatusEnum.FLAG_N.getStatusMessage()));
     }
 
     private List<BoardFileDto> getBoardFileDtoList(Board board) {

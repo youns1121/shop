@@ -28,9 +28,9 @@
         <li class="nav-item" sec:authorize="isAnonymous()"> <!--로그인하지 않은 상태이면 로그인 메뉴를 보여줍니다-->
           <a class="nav-link" href="/members/login">로그인</a>
         </li>
-        <li class="nav-item" sec:authorize="isAuthenticated()"> <!--로그인하지 않은 상태이면 자유게시판 메뉴를 보여줍니다-->
-          <a class="nav-link" href="/board/new">자유게시판</a>
-        </li>
+         <!--로그인하지 않은 상태이면 자유게시판 메뉴를 보여줍니다-->
+          <a class="nav-link" href="/board/list">자유게시판</a>
+
         <li class="nav-item" sec:authorize="isAuthenticated()"> <!--로그인한 상태면 로그아웃 메뉴를 보여줍니다-->
           <a class="nav-link" href="/members/logout">로그아웃</a>
         </li>

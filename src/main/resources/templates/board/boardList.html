@@ -35,20 +35,27 @@
     <table class="table">
       <thead>
         <tr>
-          <td>번호</td>
-          <td>제목</td>
-          <td>내용</td>
-          <td>작성자</td>
-          <td>작성 날짜</td>
+          <th>번호</th>
+          <th>제목</th>
+          <th>내용</th>
+          <th>작성자</th>
+          <th>작성 시간</th>
         </tr>
       </thead>
       <tbody>
-      <td>번호</td>
-      <td>제목</td>
-      <td>내용</td>
-      <td>작성자</td>
-      <td>작성 날짜</td>
+        <tr th:each="board, num : ${boardList}">
+          <td th:text="${num.count}"></td>
+          <td
+                  th:onclick="|location.href='@{/board/detail/}${board.boardId}'|"
+                  th:text="${board.boardTitle}"
+                  style="cursor:pointer;"
+          >
 
+          </td>
+          <td th:text="${board.boardContents}"></td>
+          <td th:text="${board.boardWriter}"></td>
+          <td th:text="${#temporals.format(board.createTime, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
       </tbody>
 
 

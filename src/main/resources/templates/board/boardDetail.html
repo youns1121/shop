@@ -12,6 +12,29 @@
 
   <script th:inline="javascript">
 
+    let id;
+
+    $(function(){
+
+      // $.ajax({
+      //   url : "/board/detail/" + id,
+      //   type : "GET",
+      //   success  : function (var){
+      //     location.href = '/board/detail/' + var
+      //   },
+      //   error : function(jqXHR, status, error){
+      //     if(jqXHR.status == '400'){
+      //       alert('알 수 없는 게시물 입니다.');
+      //     } else{
+      //       alert(jqXHR.responseText);
+      //     }
+      //   }
+      //
+      // })
+
+    });
+
+
   function deleteBoardFn(id){
 
     let token = $("meta[name='_csrf']").attr("content");
@@ -32,6 +55,8 @@
       }
     })
   }
+
+
 
   </script>
 </th:block>
