@@ -4,13 +4,10 @@ package com.shop.domain;
 import com.shop.domain.comm.BaseEntity;
 import com.shop.dto.form.ItemFormDto;
 import com.shop.enums.ItemSellStatus;
-import com.shop.enums.StatusEnum;
-import com.shop.exception.OutOfStockException;
+import com.shop.global.error.exception.OutOfStockException;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.util.List;
 
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")

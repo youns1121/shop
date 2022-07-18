@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService implements UserDetailsService {
@@ -25,8 +27,8 @@ public class MemberService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public Member getMember(String name) {
-        return memberRepository.findByEmail(name)
+    public Member getMember(Principal principal) {
+        return memberRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new IllegalArgumentException("로그인을 해주세요"));
     }
 

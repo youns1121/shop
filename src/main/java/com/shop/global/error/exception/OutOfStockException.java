@@ -1,4 +1,4 @@
-package com.shop.exception;
+package com.shop.global.error.exception;
 
 public class OutOfStockException extends RuntimeException{
 

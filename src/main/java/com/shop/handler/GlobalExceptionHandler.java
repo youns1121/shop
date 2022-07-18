@@ -35,14 +35,12 @@ public class GlobalExceptionHandler {
     protected ModelAndView handleBoardNotFoundException(BoardNotFoundException e){
 
         log.error("handleBoardNotFoundException", e);
-//        ErrorResponse response = ErrorResponse.of(ErrorCode.BOARD_NOT_FOUND);
 
         ModelAndView mav = new ModelAndView();
 
-        mav.setViewName("/board/boardList");
-        mav.addObject("exception", e);
+        mav.setViewName("redirect:/board/list");
+        mav.addObject("error", e.getErrorCode());
 
-//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         return mav;
     }
 
