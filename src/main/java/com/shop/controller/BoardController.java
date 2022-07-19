@@ -58,13 +58,14 @@ public class BoardController {
     }
 
     @PostMapping("/new")
-    public String createBoard(@Validated @ModelAttribute("board") BoardFormDto boardFormDto, List<MultipartFile> boardFileList,
-                              BindingResult bindingResult, Principal principal) throws IOException {
+    public String createBoard(@Validated @ModelAttribute("board") BoardFormDto boardFormDto,  BindingResult bindingResult,
+                              Model model, List<MultipartFile> boardFileList, Principal principal) throws IOException {
 
         if (bindingResult.hasErrors()) {
 
             log.info("errors={}", bindingResult);
-
+            Member member = memberService.getMember(principal);
+            model.addAttribute("member", member.getName());
             return "board/boardForm";
         }
 
@@ -80,10 +81,11 @@ public class BoardController {
     }
 
     @GetMapping("/detail/{id}")
-    public String detailBoard(@PathVariable("id") long id, Model model){
+    public String detailBoard(@PathVariable("id") long id, Model model, Principal principal){
 
         BoardResponseDto findBoardDetail = boardService.getBoardDetail(id);
 
+        model.addAttribute("member", memberService.getMember(principal));
         model.addAttribute("board", findBoardDetail);
         model.addAttribute("boardFileList", findBoardDetail.getBoardFileDtoList());
 
@@ -91,13 +93,10 @@ public class BoardController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateBoard(@PathVariable("id") Long id, Model model, Principal principal){
+    public String updateBoard(@PathVariable("id") Long id, Model model){
 
-        Member member = memberService.getMember(principal);
 
         BoardResponseDto findBoardDetail = boardService.getBoardDetail(id);
-
-        boardService.memberBoardCheck(member.getId(), findBoardDetail.getMemberId());
 
         model.addAttribute("board", findBoardDetail);
         model.addAttribute("boardFileList", findBoardDetail.getBoardFileDtoList());
@@ -105,15 +104,14 @@ public class BoardController {
         return "board/boardUpdate";
     }
 
-    @PostMapping("/update/{id}")
     @ResponseBody
-    public String updateBoard(@PathVariable("id") Long id, @ModelAttribute("board") BoardUpdateDto boardUpdateDto,
+    @PostMapping("/update/{id}")
+    public void updateBoard(@PathVariable("id") Long id, @ModelAttribute("board") BoardUpdateDto boardUpdateDto,
                               List<MultipartFile> boardFileList) throws IOException {
+
 
         Board board = boardService.updateBoard(boardUpdateDto, id);
         boardFileService.updateBoardFile(board, boardFileList, boardUpdateDto.getFileIdList());
-
-        return "redirect:/board/detail/"+id;
     }
 
     @PostMapping("/delete/{id}")

@@ -10,8 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
-@Builder
-@AllArgsConstructor
+
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Getter
@@ -41,6 +40,16 @@ public class Member extends BaseEntity {
     @Column(name = "member_role")
     private MemberRole memberRole;
 
+    @Builder
+    public Member(Long id, String name, String email, String password, String address, MemberRole memberRole) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.memberRole = memberRole;
+    }
+
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
 
         String password = passwordEncoder.encode(memberFormDto.getPassword());
@@ -53,6 +62,17 @@ public class Member extends BaseEntity {
                 .memberRole(MemberRole.ADMIN)
                 .password(password)
                 .build();
+    }
+
+    public static Member from(MemberFormDto memberFormDto){
+
+        return Member.builder()
+                .name(memberFormDto.getName())
+                .email(memberFormDto.getEmail())
+                .password(memberFormDto.getPassword())
+                .address(memberFormDto.getAddress())
+                .build();
+
     }
 
 

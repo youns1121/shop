@@ -36,6 +36,16 @@
             });
         }
 
+        function cancelBoard(val){
+
+            let result = confirm('취소 하시겠습니까?');
+
+            if(result){
+                location.href = '/board/detail/' + val
+            }
+
+        }
+
         function addFile(){
 
             let htmlData = '';
@@ -64,51 +74,69 @@
             }
         }
 
-
         function updateBoardFn(val){
 
-            let token = $("meta[name='_csrf']").attr("content");
-            let header = $("meta[name='_csrf_header']").attr("content");
+            let title = $('#boardTitle').val().trim().length
+            let contents = $('#boardContents').val().trim().length
 
-            let arr = [];
+            let result = confirm('저장 하시겠습니까?');
 
-            $('.fileIdList').each(function(i, obj) {
-                arr[i] = $(obj).data('fileid');
-            });
-
-            let formData = new FormData();
-
-            formData.append('boardId', [[${board.boardId}]])
-            formData.append('boardTitle', $('#boardTitle').val())
-            formData.append('boardContents', $('#boardContents').val())
-            formData.append('fileIdList', arr)
-            let inputFile = $("input[type='file']")
-            let inputFileLength = inputFile.length
-
-
-            for(var i = 0;  i < inputFileLength; i++){
-                if(!(inputFile[i].value == "")){
-                    formData.append('boardFileList', inputFile[i].files[0])
-                }
+            if( title == 0){
+                alert("제목에 공백이 있습니다.")
+                result = false;
+            }
+            else if(contents == 0){
+                alert("내용에 공백이 있습니다.")
+                result = false;
             }
 
-            $.ajax({
-                url : "/board/update/" + val,
-                type : "POST",
-                beforeSend : function(xhr){
-                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                    xhr.setRequestHeader(header, token);
-                },
-                enctype: 'multipart/form-data',
-                contentType: false,
-                processData: false,
-                cache: false,
-                data     : formData,
-                success  : function (){
-                    location.href = '/board/detail/' + val
+            if(result){
+
+                let token = $("meta[name='_csrf']").attr("content");
+                let header = $("meta[name='_csrf_header']").attr("content");
+
+                let arr = [];
+
+                $('.fileIdList').each(function(i, obj) {
+                    arr[i] = $(obj).data('fileid');
+                });
+
+                let formData = new FormData();
+
+                formData.append('boardId', [[${board.boardId}]])
+                formData.append('boardTitle', $('#boardTitle').val())
+                formData.append('boardContents', $('#boardContents').val())
+                formData.append('fileIdList', arr)
+                let inputFile = $("input[type='file']")
+                let inputFileLength = inputFile.length
+
+
+                for(var i = 0;  i < inputFileLength; i++){
+                    if(!(inputFile[i].value == "")){
+                        formData.append('boardFileList', inputFile[i].files[0])
+                    }
                 }
 
-            })
+                $.ajax({
+                    url : "/board/update/" + val,
+                    type : "POST",
+                    beforeSend : function(xhr){
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        xhr.setRequestHeader(header, token);
+                    },
+                    enctype: 'multipart/form-data',
+                    contentType: false,
+                    processData: false,
+                    cache: false,
+                    data     : formData,
+                    success  : function (){
+                        location.href = '/board/detail/' + val
+                    }
+
+                })
+            }
+
+
         }
 
         function deleteFn(val){
@@ -127,6 +155,12 @@
         }
         .fieldError {
             color: #bd2130;
+        }
+
+        textarea {
+            height: 200px;
+            border: none;
+            resize: none;
         }
     </style>
 </th:block>
@@ -148,17 +182,18 @@
 
             </div>
             <input type="text" class="form-control" th:field="*{boardTitle}" placeholder="제목을 입력해주세요"   maxlength='20'>
-            <div class="fieldError"  th:errors="*{boardTitle}" >Incorrect data</div>
         </div>
+        <div th:if="${#fields.hasErrors('boardTitle')}" th:errors="*{boardTitle}" class="fieldError">Incorrect data</div>
 
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text">내용</span>
             </div>
 
-            <textarea class="form-control" th:field="*{boardContents}" aria-label="With textarea" ></textarea>
-            <div class="fieldError" th:errors="*{boardContents}" >Incorrect data</div>
+            <textarea class="form-control" th:field="*{boardContents}" aria-label="With textarea"></textarea>
         </div>
+        <div th:if="${#fields.hasErrors('boardContents')}" th:errors="*{boardContents}" class="fieldError">Incorrect data</div>
+
 
 
         <div>
@@ -191,7 +226,7 @@
         <div style="text-align: center">
             <button  th:onclick="|updateBoardFn(${board.boardId})|"   type="button" class="btn btn-primary" id="btn" >저장</button>
 
-            <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-primary">취소</button>
+            <button th:onclick="|cancelBoard(${board.boardId})|" type="button" class="btn btn-primary">취소</button>
         </div>
     </form>
 </div>

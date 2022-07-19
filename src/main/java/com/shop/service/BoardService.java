@@ -52,13 +52,6 @@ public class BoardService {
         return board;
     }
 
-    public void memberBoardCheck(Long memberId, Long boardMemberId){
-
-        if(!memberId.equals(boardMemberId)){
-            throw new EntityNotFoundException("잘못된 접근입니다.");
-        }
-    }
-
     @Transactional(readOnly = true)
     public BoardResponseDto getBoardDetail(Long boardId){
 
@@ -103,8 +96,6 @@ public class BoardService {
             deleteFile(board);
         }
         board.delete(board);
-
-
     }
 
     private void deleteFile(Board board) {

@@ -1,10 +1,10 @@
 package com.shop.dto;
 
-import com.shop.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Getter

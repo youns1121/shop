@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
@@ -12,51 +13,36 @@
 
   <script th:inline="javascript">
 
-    let id;
-
-    $(function(){
-
-      // $.ajax({
-      //   url : "/board/detail/" + id,
-      //   type : "GET",
-      //   success  : function (var){
-      //     location.href = '/board/detail/' + var
-      //   },
-      //   error : function(jqXHR, status, error){
-      //     if(jqXHR.status == '400'){
-      //       alert('알 수 없는 게시물 입니다.');
-      //     } else{
-      //       alert(jqXHR.responseText);
-      //     }
-      //   }
-      //
-      // })
-
-    });
-
 
   function deleteBoardFn(id){
 
-    let token = $("meta[name='_csrf']").attr("content");
-    let header = $("meta[name='_csrf_header']").attr("content");
+    let result = confirm('삭제 하시겠습니까?');
 
-    let idValue = {id : id }
-    $.ajax({
-      type: 'POST',
-      beforeSend : function(xhr){
-        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-        xhr.setRequestHeader(header, token);
-      },
-      url: '/board/delete/'+id,
-      data: idValue,
-      success: function (){
-        alert("삭제 완료되었습니다.")
-        location.href='/'
-      }
-    })
+    if(result){
+
+      let token = $("meta[name='_csrf']").attr("content");
+      let header = $("meta[name='_csrf_header']").attr("content");
+
+      let idValue = {id : id }
+      $.ajax({
+        type: 'POST',
+        beforeSend : function(xhr){
+          /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+          xhr.setRequestHeader(header, token);
+        },
+        url: '/board/delete/'+id,
+        data: idValue,
+        success: function (){
+          location.href='/board/list'
+        }
+      })
+    } else {
+
+    }
+
+
+
   }
-
-
 
   </script>
 </th:block>
@@ -102,7 +88,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text">내용</span>
       </div>
-      <a class="form-control" th:text="${board.boardContents}" style="text-decoration: none" ></a>
+      <a class="form-control" th:text="${board.boardContents}" style="text-decoration: none;" ></a>
     </div>
 
     <div>
@@ -121,9 +107,15 @@
 
     <br/>
       <div style="text-align: center">
-        <button th:onclick="|location.href='@{/board/update/}${board.boardId}'|" type="button" class="btn btn-primary" id="btn">수정</button>
-        <button th:onclick="|location.href='@{/}'|" type="button" class="btn btn-primary">목록</button>
-        <button type="button" th:onclick="|deleteBoardFn('${board.boardId}')|" class="btn btn-primary" id="delete">삭제</button>
+        <span th:if="${member} != null and ${board.memberId} == ${member.id}">
+          <span class="nav-item" sec:authorize="isAuthenticated()">
+              <button th:onclick="|location.href='@{/board/update/}${board.boardId}'|" type="button" class="btn btn-primary" id="btn">수정</button>
+          </span>
+          <span class="nav-item" sec:authorize="isAuthenticated()">
+            <button type="button" th:onclick="|deleteBoardFn('${board.boardId}')|" class="btn btn-primary" id="delete">삭제</button>
+          </span>
+        </span>
+        <button th:onclick="|location.href='@{/board/list}'|" type="button" class="btn btn-primary">목록</button>
       </div>
     </div>
   </form>

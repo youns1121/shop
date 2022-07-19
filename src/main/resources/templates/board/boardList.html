@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
@@ -29,20 +30,19 @@
     a {
       text-decoration: none;
     }
-
-
   </style>
 </th:block>
 
 <div layout:fragment="content">
   <form th:object="${boardList}" th:action method="get">
-
+    <div class="nav-item" sec:authorize="isAuthenticated()">
+      <button type="button" th:onclick="|location.href='@{/board/new}'|" class="btn btn-primary" id="delete">글쓰기</button>
+    </div>
     <table class="table">
       <thead>
         <tr>
           <th>번호</th>
           <th>제목</th>
-          <th>내용</th>
           <th>작성자</th>
           <th>작성 시간</th>
         </tr>
@@ -57,15 +57,11 @@
           >
 
           </td>
-          <td th:text="${board.boardContents}"></td>
           <td th:text="${board.boardWriter}"></td>
           <td th:text="${#temporals.format(board.createTime, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>
       </tbody>
-
-
     </table>
-
 
   </form>
 </div>

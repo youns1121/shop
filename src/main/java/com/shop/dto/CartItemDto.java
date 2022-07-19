@@ -1,7 +1,5 @@
 package com.shop.dto;
 
-import com.shop.domain.Cart;
-import com.shop.domain.Item;
 import lombok.Getter;
 import lombok.Setter;
 

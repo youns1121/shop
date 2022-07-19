@@ -1,7 +1,6 @@
 package com.shop.global.error.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.http.HttpStatus;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ErrorCode {
@@ -19,11 +18,15 @@ public enum ErrorCode {
     EMAIL_DUPLICATION(400, "M001", "Email is Duplication"),
     LOGIN_INPUT_INVALID(400, "M002", "Login input is invalid"),
 
+
+    // Stock
+    OUT_OF_STOCK(500, "S0001", "재고가 초가되었습니다."),
+
     // Board
-    BOARD_NOT_FOUND(400, "B0001", "알 수 없는 게시물입니다."),
+    BOARD_NOT_FOUND(400, "B0001", "존재하지 않는 게시물입니다."),
 
     // FILE
-    FILE_NOT_FOUND(400, "FO001", "알 수 없는 파일입니다."),
+    FILE_NOT_FOUND(400, "FO001", "존재하지 않는 파일입니다."),
 
     ;
     private final String code;

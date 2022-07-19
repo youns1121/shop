@@ -3,6 +3,8 @@ package com.shop.handler;
 import com.shop.global.error.ErrorResponse;
 import com.shop.global.error.exception.BoardNotFoundException;
 import com.shop.global.error.exception.ErrorCode;
+import com.shop.service.BoardService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,11 @@ import org.springframework.web.servlet.ModelAndView;
 import java.nio.file.FileSystemNotFoundException;
 
 @Slf4j
+@RequiredArgsConstructor
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private final BoardService boardService;
 
     /**
      *  javax.validation.Valid or @Validated 으로 binding error 발생시 발생한다.
@@ -38,8 +43,9 @@ public class GlobalExceptionHandler {
 
         ModelAndView mav = new ModelAndView();
 
-        mav.setViewName("redirect:/board/list");
-        mav.addObject("error", e.getErrorCode());
+        mav.setViewName("/board/boardlist");
+        mav.addObject("boardList", boardService.getBoardList());
+        mav.addObject("error", e.getMessage());
 
         return mav;
     }
