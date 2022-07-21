@@ -13,7 +13,6 @@
 
   <script th:inline="javascript">
 
-
   function deleteBoardFn(id){
 
     let result = confirm('삭제 하시겠습니까?');
@@ -36,14 +35,8 @@
           location.href='/board/list'
         }
       })
-    } else {
-
     }
-
-
-
   }
-
   </script>
 </th:block>
 
@@ -60,8 +53,6 @@
     a {
       text-decoration: none;
     }
-
-
   </style>
 </th:block>
 
@@ -94,7 +85,6 @@
     <div>
 
       <div class="custom-file-detail">
-
         <div  class="custom-file-detail" th:if="${#lists.size(boardFileList) ne 0}">
           <div th:each="boardFile : ${boardFileList}">
             <a th:href="|/board/file/download/${boardFile.boardFileId}|"  th:text="${boardFile.boardFileName}" style="padding:1px 30px 3px 4px;"></a>
@@ -107,14 +97,14 @@
 
     <br/>
       <div style="text-align: center">
-        <span th:if="${member} != null and ${board.memberId} == ${member.id}">
+<!--        <span th:if="${member} != null and ${board.memberId} == ${member.id}">-->
           <span class="nav-item" sec:authorize="isAuthenticated()">
               <button th:onclick="|location.href='@{/board/update/}${board.boardId}'|" type="button" class="btn btn-primary" id="btn">수정</button>
           </span>
           <span class="nav-item" sec:authorize="isAuthenticated()">
             <button type="button" th:onclick="|deleteBoardFn('${board.boardId}')|" class="btn btn-primary" id="delete">삭제</button>
           </span>
-        </span>
+<!--        </span>-->
         <button th:onclick="|location.href='@{/board/list}'|" type="button" class="btn btn-primary">목록</button>
       </div>
     </div>

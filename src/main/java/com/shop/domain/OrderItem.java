@@ -8,7 +8,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")
 @Getter
-@Setter
 @Table(name = "order_item")
 @Entity
 public class OrderItem extends BaseEntity {
@@ -22,6 +21,7 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "item_id")
     private Item item;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;

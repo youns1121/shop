@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")
-@Setter
 @Getter
 @Table(name="item_img")
 @Entity
@@ -34,12 +33,6 @@ public class ItemImg extends BaseEntity { //상품이미지
     private Item item;
 
 
-    public void updateItemImg(String oriImgName, String imgName, String imgUrl){ //이미지 정보 업데이트 메서드
-        this.oriImgName = oriImgName;
-        this.imgName = imgName;
-        this.imgUrl = imgUrl;
-    }
-
     @Builder
     public ItemImg(Long id, String imgName, String oriImgName, String imgUrl, String repImgYn, Item item) {
         this.id = id;
@@ -49,4 +42,23 @@ public class ItemImg extends BaseEntity { //상품이미지
         this.repImgYn = repImgYn;
         this.item = item;
     }
+
+    public void updateItemImg(String oriImgName, String imgName, String imgUrl){ //이미지 정보 업데이트 메서드
+        this.oriImgName = oriImgName;
+        this.imgName = imgName;
+        this.imgUrl = imgUrl;
+    }
+
+    public ItemImg create(Item item){
+
+        return ItemImg.builder()
+                .item(item)
+                .build();
+    }
+
+    public void updateRepImgYn(String RepImgYn){
+        this.repImgYn = repImgYn;
+    }
+
+
 }

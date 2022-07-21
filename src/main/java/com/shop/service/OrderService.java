@@ -33,17 +33,16 @@ public class OrderService {
 
     @Transactional
     public Long order(OrderDto orderDto, String email){
+
         Item item = itemRepository.findById(orderDto.getItemId()) //주문 할 상품을 조회
                 .orElseThrow(EntityExistsException::new);
-
-        Member member = getMember(email);
 
         List<OrderItem> orderItemList = new ArrayList<>();
         OrderItem orderItem = OrderItem.create(item, orderDto.getCount()); // 주문할 상품 엔티티와 주문 수량을 이용하여 주문 상품 엔티티를 생성
 
         orderItemList.add(orderItem);
 
-        Order order = Order.create(member, orderItemList);// 회원 정보와 주문할 상품 리스트 정보를 이용하여 주문 엔티티를 생성
+        Order order = Order.create(getMember(email), orderItemList);// 회원 정보와 주문할 상품 리스트 정보를 이용하여 주문 엔티티를 생성
 
         orderRepository.save(order); // 생성한 주문 엔티티를 저장
 

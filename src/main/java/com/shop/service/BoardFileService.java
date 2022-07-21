@@ -27,7 +27,6 @@ import java.util.*;
 @Service
 public class BoardFileService {
 
-    private final BoardRepository boardRepository;
     private final BoardFileRepository boardFileRepository;
 
     @Value("C:/Users/daema/ysmin/")

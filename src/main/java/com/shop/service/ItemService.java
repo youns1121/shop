@@ -46,15 +46,15 @@ public class ItemService {
 
         for(int i = 0; i< itemImgFileList.size(); i++){
             ItemImg itemImg = new ItemImg();
-            itemImg.setItem(item);
+            itemImg.create(item);
             if(i == 0){
-                itemImg.setRepImgYn(StatusEnum.FLAG_Y.getValue()); // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 "Y" 세팅, 나머지 상품 이미지는 "N"으로 설정
+                itemImg.updateRepImgYn(StatusEnum.FLAG_Y.getValue()); // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 "Y" 세팅, 나머지 상품 이미지는 "N"으로 설정
             }else {
-                itemImg.setRepImgYn(StatusEnum.FLAG_N.getValue());
+                itemImg.updateRepImgYn(StatusEnum.FLAG_N.getValue());
             }
 
             //비즈니스 로직 처리
-            if(! itemImgFileList.get(i).isEmpty()) {
+            if(!itemImgFileList.get(i).isEmpty()) {
                 itemImgService.saveItemImg(itemImg, itemImgFileList.get(i)); // 상품의 이미지 정보를 저장
             }
         }
