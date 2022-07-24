@@ -3,39 +3,38 @@
       xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <!-- 사용자 CSS 추가 -->
+    <th:block layout:fragment="css">
+        <link th:href="@{/css/item/itemMng.css}" rel="stylesheet" />
+    </th:block>
 
-<!-- 사용자 CSS 추가 -->
-<th:block layout:fragment="css">
-    <link th:href="@{/css/item/itemMng.css}" rel="stylesheet" />
-</th:block>
+    <!-- 사용자 스크립트 추가 -->
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
 
-<!-- 사용자 스크립트 추가 -->
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-
-        $(document).ready(function(){
-            $("#searchBtn").on("click",function(e) {
-                e.preventDefault(); // <검색> 버튼 클릭 시 form 태그의 전송을 막아줌
-                page(0); // <검색> 버튼을 클릭할 페이지 번호로 0번째 페이지를 조회하는 page함수를 호출함
+            $(document).ready(function(){
+                $("#searchBtn").on("click",function(e) {
+                    e.preventDefault(); // <검색> 버튼 클릭 시 form 태그의 전송을 막아줌
+                    page(0); // <검색> 버튼을 클릭할 페이지 번호로 0번째 페이지를 조회하는 page함수를 호출함
+                });
             });
-        });
 
-        function page(page){ // page 함수는 이동할 페이지 값을 받아서 현재 조회조건으로 설정된 상품 등록 기간, 판매 상태, 조회 유형, 검색어를 파라미터로 설정 후 상품 데이터를 조회함
-            var searchDateType = $("#searchDateType").val();
-            var itemSellStatus = $("#itemSellStatus").val();
-            var searchBy = $("#searchBy").val();
-            var searchQuery = $("#searchQuery").val();
+            function page(page){ // page 함수는 이동할 페이지 값을 받아서 현재 조회조건으로 설정된 상품 등록 기간, 판매 상태, 조회 유형, 검색어를 파라미터로 설정 후 상품 데이터를 조회함
+                var searchDateType = $("#searchDateType").val();
+                var itemSellStatus = $("#itemSellStatus").val();
+                var searchBy = $("#searchBy").val();
+                var searchQuery = $("#searchQuery").val();
 
-            location.href="/admin/items/" + page + "?searchDateType=" + searchDateType
-                + "&itemSellStatus=" + itemSellStatus
-                + "&searchBy=" + searchBy
-                + "&searchQuery=" + searchQuery;
-        }
+                location.href="/admin/items/" + page + "?searchDateType=" + searchDateType
+                    + "&itemSellStatus=" + itemSellStatus
+                    + "&searchBy=" + searchBy
+                    + "&searchQuery=" + searchQuery;
+            }
 
-    </script>
-</th:block>
-
-
+        </script>
+    </th:block>
+</head>
 
 <div layout:fragment="content">
 
@@ -62,7 +61,8 @@
                 </td>
                 <td th:text="${item.itemSellStatus == T(com.shop.enums.ItemSellStatus).SELL} ? '판매중' : '품절'"></td> <!--현재 상품의 판매 상태가 SELL이면 판매중-->
                 <td th:text="${item.createdBy}"></td>
-                <td th:text="${item.createTime}"></td>
+                <td th:text="${#temporals.format(item.createTime, 'yyyy-MM-dd HH:mm')}"></td>
+
             </tr>
             </tbody>
         </table>

@@ -49,14 +49,12 @@ public class ItemImg extends BaseEntity { //상품이미지
         this.imgUrl = imgUrl;
     }
 
-    public ItemImg create(Item item){
+    public void setItem(Item item){
 
-        return ItemImg.builder()
-                .item(item)
-                .build();
+        this.item = item;
     }
 
-    public void updateRepImgYn(String RepImgYn){
+    public void updateRepImgYn(String repImgYn){
         this.repImgYn = repImgYn;
     }
 

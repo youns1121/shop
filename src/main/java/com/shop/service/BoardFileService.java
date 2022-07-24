@@ -29,7 +29,7 @@ public class BoardFileService {
 
     private final BoardFileRepository boardFileRepository;
 
-    @Value("C:/Users/daema/ysmin/")
+    @Value("D:/shop/board/")
     private String uploadPath;
 
     @Transactional

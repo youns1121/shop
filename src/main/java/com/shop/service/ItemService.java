@@ -31,6 +31,7 @@ public class ItemService {
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
 
+    @Transactional
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws IOException {
 
         //상품등록
@@ -46,7 +47,7 @@ public class ItemService {
 
         for(int i = 0; i< itemImgFileList.size(); i++){
             ItemImg itemImg = new ItemImg();
-            itemImg.create(item);
+            itemImg.setItem(item);
             if(i == 0){
                 itemImg.updateRepImgYn(StatusEnum.FLAG_Y.getValue()); // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 "Y" 세팅, 나머지 상품 이미지는 "N"으로 설정
             }else {
