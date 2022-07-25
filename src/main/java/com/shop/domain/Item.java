@@ -10,15 +10,15 @@ import lombok.*;
 import javax.persistence.*;
 
 @NoArgsConstructor
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(of="id", callSuper = false)
 @ToString
-@Setter
 @Getter
 @Table(name="item")
 @Entity
 public class Item extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "item_id")
     private Long id;
 

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(of="id", callSuper = false)
 @Getter
 @Setter
 @Table(name = "cart")

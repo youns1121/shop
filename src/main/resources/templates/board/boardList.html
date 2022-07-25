@@ -34,6 +34,13 @@
 </th:block>
 
 <div layout:fragment="content">
+
+  <form class="form-inline my-2 my-lg-0" action="/" method="get">
+    <input name="searchQuery" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form>
+  <br/>
+
   <form th:object="${boardList}" th:action method="get">
     <div class="nav-item" sec:authorize="isAuthenticated()">
       <button type="button" th:onclick="|location.href='@{/board/new}'|" class="btn btn-primary" id="delete">글쓰기</button>

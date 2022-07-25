@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @NoArgsConstructor
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(of="id", callSuper = false)
 @Getter
 @Table(name = "order_item")
 @Entity

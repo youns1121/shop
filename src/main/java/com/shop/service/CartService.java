@@ -109,13 +109,7 @@ public class CartService { // 장바구니에 상품을 담는 로직
         Member curMember = getMember(email);
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
 
-        Member savedMember = cartItem.getCart().getMember(); // 장바구니 상품을 저장한 회원을 조회
-
-        if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())) { // 현재 로그인한 회원과 장바구니 상품을 저장항 회원이 다를경우 false, 같을경우 true
-            return false;
-        }
-
-        return true;
+        return StringUtils.equals(curMember.getEmail(), cartItem.getCart().getMember().getEmail());
     }
 
     private Member getMember(String email) {

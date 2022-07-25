@@ -47,7 +47,7 @@ public class BoardFileService {
     private void notExistFileDelete(List<Long> fileIdList, List<BoardFile> findBoardFileList) {
 
         for (BoardFile boardFile : findBoardFileList) {
-            if (! fileIdList.contains(boardFile.getBoardFileId())) {
+            if (!fileIdList.contains(boardFile.getBoardFileId())) {
 
                 boardFileRepository.delete(boardFile);
             }

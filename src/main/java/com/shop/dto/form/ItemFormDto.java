@@ -22,7 +22,7 @@ public class ItemFormDto {
     private Long id;
 
     @NotBlank(message = "상품명은 필수 입력 값입니다.")
-    private String itemName; //아이템 이름
+    private String itemName;
 
     @NotNull(message = "가격은 필수 입력 값입니다.")
     private Integer price;

@@ -6,14 +6,19 @@ import com.shop.domain.Member;
 import com.shop.dto.BoardFileDto;
 import com.shop.dto.BoardUpdateDto;
 import com.shop.dto.form.BoardFormDto;
+import com.shop.dto.request.BoardRequestDto;
 import com.shop.dto.response.BoardResponseDto;
+import com.shop.dto.response.BoardResponsePagingDto;
 import com.shop.enums.StatusEnum;
 import com.shop.global.error.exception.BoardNotFoundException;
 import com.shop.global.error.exception.ErrorCode;
 import com.shop.repository.BoardFileRepository;
 import com.shop.repository.BoardRepository;
 import com.shop.repository.MemberRepository;
+import com.shop.repository.custom.BoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -28,6 +33,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardFileRepository boardFileRepository;
     private final MemberRepository memberRepository;
+    private final BoardRepositoryCustom boardRepositoryCustom;
 
     @Transactional
     public Board createBoard(BoardFormDto boardFormDto, String memberName){
@@ -72,6 +78,11 @@ public class BoardService {
     public List<BoardResponseDto> getBoardList(){
 
         return BoardResponseDto.from(boardRepository.findByDelYn(StatusEnum.FLAG_N.getStatusMessage()));
+    }
+
+    public Page<BoardResponsePagingDto> getBoardSearchList(BoardRequestDto boardRequestDto, Pageable pageable){
+
+        return boardRepositoryCustom.getSearchBoardPage(boardRequestDto, pageable);
     }
 
     private List<BoardFileDto> getBoardFileDtoList(Board board) {

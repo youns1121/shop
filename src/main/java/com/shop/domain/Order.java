@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @NoArgsConstructor
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(of="id", callSuper = false)
 @Setter
 @Getter
 @Table(name = "orders")

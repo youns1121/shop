@@ -5,12 +5,15 @@ import com.shop.domain.Member;
 import com.shop.dto.BoardFileDownloadDto;
 import com.shop.dto.BoardUpdateDto;
 import com.shop.dto.form.BoardFormDto;
+import com.shop.dto.request.BoardRequestDto;
 import com.shop.dto.response.BoardResponseDto;
 import com.shop.service.BoardFileService;
 import com.shop.service.BoardService;
 import com.shop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -38,9 +41,9 @@ public class BoardController {
     private final MemberService memberService;
 
     @GetMapping("/list")
-    public String listBoard(Model model){
+    public String listBoard(Model model, BoardRequestDto boardRequestDto, Pageable pageable){
 
-        model.addAttribute("boardList", boardService.getBoardList());
+        model.addAttribute("boardList", boardService.getBoardSearchList(boardRequestDto, pageable));
 
         return "board/boardList";
     }
@@ -108,7 +111,6 @@ public class BoardController {
     @PostMapping("/update/{id}")
     public void updateBoard(@PathVariable("id") Long id, @ModelAttribute("board") BoardUpdateDto boardUpdateDto,
                               List<MultipartFile> boardFileList) throws IOException {
-
 
         Board board = boardService.updateBoard(boardUpdateDto, id);
         boardFileService.updateBoardFile(board, boardFileList, boardUpdateDto.getFileIdList());

@@ -1,6 +1,7 @@
 package com.shop.repository;
 
 import com.shop.domain.Board;
+import com.shop.repository.custom.BoardRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

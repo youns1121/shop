@@ -12,7 +12,7 @@ import javax.persistence.*;
 
 
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @Getter
 @Setter
 @Table(name="member")
