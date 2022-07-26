@@ -51,6 +51,7 @@ public class BoardRepositoryCustom {
                 .leftJoin(board.boardFileList, boardFile)
 
                 .where(board.delYn.eq(StatusEnum.FLAG_N.getValue()))
+                .orderBy(board.createTime.desc())
                 .groupBy(board.boardId)
 
                 .offset(pageable.getOffset())
