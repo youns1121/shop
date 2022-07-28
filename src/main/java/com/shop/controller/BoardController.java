@@ -7,6 +7,7 @@ import com.shop.dto.BoardUpdateDto;
 import com.shop.dto.form.BoardFormDto;
 import com.shop.dto.request.BoardRequestDto;
 import com.shop.dto.response.BoardResponseDto;
+import com.shop.enums.BoardEnum;
 import com.shop.service.BoardFileService;
 import com.shop.service.BoardService;
 import com.shop.service.MemberService;
@@ -43,6 +44,7 @@ public class BoardController {
     @GetMapping("/list")
     public String listBoard(Model model, BoardRequestDto boardRequestDto, Pageable pageable){
 
+        model.addAttribute("boardEnum", BoardEnum.values());
         model.addAttribute("boardList", boardService.getBoardSearchList(boardRequestDto, pageable));
 
         return "board/boardList";

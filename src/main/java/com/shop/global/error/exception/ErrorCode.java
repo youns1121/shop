@@ -19,6 +19,9 @@ public enum ErrorCode {
     LOGIN_INPUT_INVALID(400, "M002", "Login input is invalid"),
 
 
+    // Item
+    ITEM_NOT_FOUND(400, "I0001", "존재하지 않는 상품입니다."),
+
     // Stock
     OUT_OF_STOCK(500, "S0001", "재고가 초가되었습니다."),
 
@@ -31,7 +34,7 @@ public enum ErrorCode {
     ;
     private final String code;
     private final String message;
-    private int status;
+    private final int status;
 
     ErrorCode(final int status, final String code, final String message) {
         this.status = status;

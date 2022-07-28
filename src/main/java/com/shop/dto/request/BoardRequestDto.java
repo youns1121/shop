@@ -3,6 +3,7 @@ package com.shop.dto.request;
 import com.shop.domain.Board;
 import com.shop.dto.BoardFileDto;
 import com.shop.dto.paging.PagingDto;
+import com.shop.enums.BoardEnum;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,8 +37,12 @@ public class BoardRequestDto extends PagingDto {
 
     private LocalDateTime updateTime;
 
+    private String searchName;
+
+    private BoardEnum boardEnum;
+
     @Builder
-    public BoardRequestDto(Long boardId, Long memberId, String boardWriter, String boardTitle, String boardContents, String delYn, List<BoardFileDto> boardFileDtoList, List<Long> fileIdList, LocalDateTime createTime, LocalDateTime updateTime) {
+    public BoardRequestDto(Long boardId, Long memberId, String boardWriter, String boardTitle, String boardContents, String delYn, List<BoardFileDto> boardFileDtoList, List<Long> fileIdList, LocalDateTime createTime, LocalDateTime updateTime, String searchName, BoardEnum boardEnum) {
         this.boardId = boardId;
         this.memberId = memberId;
         this.boardWriter = boardWriter;
@@ -48,6 +53,7 @@ public class BoardRequestDto extends PagingDto {
         this.fileIdList = fileIdList;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.searchName = searchName;
     }
 
     public static List<BoardRequestDto> from(List<Board> boardList){

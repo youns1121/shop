@@ -45,6 +45,8 @@
             <tr>
                 <td>상품아이디</td>
                 <td>상품명</td>
+                <td>상품가격</td>
+                <td>상품재고</td>
                 <td>상태</td>
                 <td>등록자</td>
                 <td>등록일</td>
@@ -52,13 +54,15 @@
             </thead>
             <tbody>
 
-            <tr th:each="item, status: ${items.getContent()}"> <!--items.getContent() 메소드를 호출하면 조회한 상품 데이터 리스트를 얻을 수 있습니다-->
+            <tr th:each="item, number : ${items.getContent()}"> <!--items.getContent() 메소드를 호출하면 조회한 상품 데이터 리스트를 얻을 수 있습니다-->
 
-                <td th:text="${item.itemName}"></td>
+                <td th:text="${number.count}"></td>
                 <td>
 
                     <a th:href="'/admin/item/'+${item.id}" th:text="${item.itemName}"></a>
                 </td>
+                <td th:text="${#numbers.formatInteger(item.price, 3, 'COMMA') + '원'}"></td>
+                <td th:text="${item.stockNumber}"></td>
                 <td th:text="${item.itemSellStatus == T(com.shop.enums.ItemSellStatus).SELL} ? '판매중' : '품절'"></td> <!--현재 상품의 판매 상태가 SELL이면 판매중-->
                 <td th:text="${item.createdBy}"></td>
                 <td th:text="${#temporals.format(item.createTime, 'yyyy-MM-dd HH:mm')}"></td>

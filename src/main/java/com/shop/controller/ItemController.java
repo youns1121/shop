@@ -70,16 +70,11 @@ public class ItemController {
     @GetMapping(value = "/admin/item/{itemId}")
     public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
 
-        try{
-            ItemFormDto itemFormDto = itemService.getItemDtl(itemId); // 조회한 상품 데이터를 모델에 담아서 뷰로 전달
-            model.addAttribute("itemFormDto", itemFormDto);
-        } catch (EntityNotFoundException e){
-            model.addAttribute("errorMessage", "존재하지 않는 상품 입니다.");
-            model.addAttribute("itemFormDto", new ItemFormDto());
-            return "item/itemForm";
-        }
 
-        return "item/itemForm";
+        ItemFormDto itemFormDto = itemService.getItemDtl(itemId); // 조회한 상품 데이터를 모델에 담아서 뷰로 전달
+        model.addAttribute("itemFormDto", itemFormDto);
+
+        return "item/itemUpdate";
     }
 
     @PostMapping(value = "/admin/item/{itemId}")

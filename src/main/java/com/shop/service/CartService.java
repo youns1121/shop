@@ -13,6 +13,7 @@ import com.shop.repository.CartItemRepository;
 import com.shop.repository.CartRepository;
 import com.shop.repository.ItemRepository;
 import com.shop.repository.MemberRepository;
+import com.shop.repository.custom.CartItemRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +27,13 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class CartService { // 장바구니에 상품을 담는 로직
+public class CartService { 
 
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final CartItemRepositoryCustom cartItemRepositoryCustom;
     private final OrderService orderService;
 
     /**
@@ -45,23 +47,17 @@ public class CartService { // 장바구니에 상품을 담는 로직
 
         Item item = itemRepository.findById(cartItemDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);// 장바구니에 담을 상품 엔티티를 조회
-
+        
         Member member = getMember(email);
 
-        Cart cart = cartRepository.findByMemberId(member.getId());// 현재 로그인한 회원의 장바구니 엔티티 조회
+        Cart cart = Optional.ofNullable(cartRepository.findByMemberId(member.getId()))
+                .orElseGet(()-> getCart(member));// 현재 로그인한 회원의 장바구니 엔티티 조회
 
-        if(cart == null){
-            cart = getCart(member);
-        }
 
         CartItem savedCartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), item.getId());
 
-        Optional<CartItem> itemOptional = Optional.ofNullable(savedCartItem);
-        if(itemOptional.isPresent()){
-
-        // 현재 상품이 장바구니에 이미 들어가 있는지 조회
-        savedCartItem.addCount(cartItemDto.getCount());
-        return savedCartItem.getId();
+        if (isExistCart(cartItemDto, savedCartItem)){
+            return savedCartItem.getId();
         }
 
         // 장바구니, 상품 엔티티, 장바구니에 담을 수량을 이용해 CartItem 엔티티 생성
@@ -71,12 +67,6 @@ public class CartService { // 장바구니에 상품을 담는 로직
         return cartItem.getId();
     }
 
-    private Cart getCart(Member member) {
-        Cart cart;
-        cart = Cart.createCart(member); // 상품을 처음으로 장바구니에 담을 경우 해당 회원의 장바구니 엔티티 생성
-        cartRepository.save(cart);
-        return cart;
-    }
 
 
     /**
@@ -94,7 +84,7 @@ public class CartService { // 장바구니에 상품을 담는 로직
 
         Cart cart = cartRepository.findByMemberId(member.getId());
 
-        return cart == null ? cartDetailDtoList : cartItemRepository.findCartDetailDtoList(cart.getId());
+        return cart == null ? cartDetailDtoList : cartItemRepositoryCustom.getCartDetailList(cart.getId());
     }
 
     /**
@@ -161,7 +151,9 @@ public class CartService { // 장바구니에 상품을 담는 로직
     }
 
     private Long create(List<CartOrderDto> cartOrderDtoList, String email) {
+
         List<OrderDto> orderDtoList = new ArrayList<>();
+
         for (CartOrderDto cartOrderDto : cartOrderDtoList){
 
             CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
@@ -169,5 +161,24 @@ public class CartService { // 장바구니에 상품을 담는 로직
         }
 
         return orderService.orders(orderDtoList, email); // 장바구니에 담은 상품을 주문하도록 주문 로직을 호출
+    }
+
+    private boolean isExistCart(CartItemDto cartItemDto, CartItem savedCartItem) {
+        Optional<CartItem> itemOptional = Optional.ofNullable(savedCartItem);
+
+        if(itemOptional.isPresent()){
+
+            savedCartItem.addCount(cartItemDto.getCount());
+            return true;
+        }
+
+        return false;
+    }
+
+    private Cart getCart(Member member) {
+        Cart cart;
+        cart = Cart.createCart(member); // 상품을 처음으로 장바구니에 담을 경우 해당 회원의 장바구니 엔티티 생성
+        cartRepository.save(cart);
+        return cart;
     }
 }

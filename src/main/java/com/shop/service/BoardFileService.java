@@ -48,7 +48,6 @@ public class BoardFileService {
 
         for (BoardFile boardFile : findBoardFileList) {
             if (!fileIdList.contains(boardFile.getBoardFileId())) {
-
                 boardFileRepository.delete(boardFile);
             }
         }

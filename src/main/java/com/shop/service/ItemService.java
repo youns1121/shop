@@ -7,6 +7,8 @@ import com.shop.dto.form.ItemFormDto;
 import com.shop.domain.Item;
 import com.shop.domain.ItemImg;
 import com.shop.enums.StatusEnum;
+import com.shop.global.error.exception.ErrorCode;
+import com.shop.global.error.exception.ItemNotFoundException;
 import com.shop.repository.ItemImgRepository;
 import com.shop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ItemService {
 
@@ -43,29 +44,12 @@ public class ItemService {
         return item.getId();
     }
 
-    private void createItemImages(List<MultipartFile> itemImgFileList, Item item) throws IOException {
 
-        for(int i = 0; i< itemImgFileList.size(); i++){
-            ItemImg itemImg = new ItemImg();
-            itemImg.setItem(item);
-            if(i == 0){
-                itemImg.updateRepImgYn(StatusEnum.FLAG_Y.getValue()); // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 "Y" 세팅, 나머지 상품 이미지는 "N"으로 설정
-            }else {
-                itemImg.updateRepImgYn(StatusEnum.FLAG_N.getValue());
-            }
-
-            //비즈니스 로직 처리
-            if(!itemImgFileList.get(i).isEmpty()) {
-                itemImgService.saveItemImg(itemImg, itemImgFileList.get(i)); // 상품의 이미지 정보를 저장
-            }
-        }
-    }
 
     @Transactional(readOnly = true) // 상품 데이터를 읽어오는 트랜잭션을 읽기 전용 설정, jpa가 변경감지(더티체킹)을 수행하지 않아서 성능을 향상 시킬 수 있음
     public ItemFormDto getItemDtl(Long itemId){
 
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId); // 해당 상품의 이미지를 등록 아이디 순으로 조회
-
         List<ItemImgDto> itemImgDtoList = new ArrayList<>();
 
         for(ItemImg itemImg : itemImgList){ // 조회한 Itemimg 엔티티를 ItemImgDto객체로 만들어서 리스트에 추가
@@ -73,7 +57,9 @@ public class ItemService {
             itemImgDtoList.add(ItemImgDto.from(itemImg));
         }
 
-        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new); // 상품의 아이디를 통해 상품 엔티티를 조회합니다.
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new ItemNotFoundException(ErrorCode.ITEM_NOT_FOUND.getMessage())); // 상품의 아이디를 통해 상품 엔티티를 조회합니다.
+
         ItemFormDto itemFormDto = ItemFormDto.from(item);
         itemFormDto.setItemImgDtoList(itemImgDtoList);
 
@@ -91,10 +77,7 @@ public class ItemService {
         List<Long> itemImgIds = itemFormDto.getItemImgIds(); // 상품 이미지 아이디 리스트를 조회합니다.
 
         //이미지 등록
-        for(int i = 0; i < itemImgFileList.size(); i++){
-            itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i)); // 상품 이미지를 업데이트하기 위해서 updateItemImg()
-            //메서드에 상품 이미지 아이디와, 상품 이미지 파일 정보를 파라미터로 전달
-        }
+        updateItemImages(itemImgFileList, itemImgIds);
 
         return item.getId();
     }
@@ -109,5 +92,30 @@ public class ItemService {
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
 
         return itemRepository.getMainItemPage(itemSearchDto, pageable);
+    }
+
+    private void updateItemImages(List<MultipartFile> itemImgFileList, List<Long> itemImgIds) throws Exception {
+        for(int i = 0; i < itemImgFileList.size(); i++){
+            itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i)); // 상품 이미지를 업데이트하기 위해서 updateItemImg()
+            //메서드에 상품 이미지 아이디와, 상품 이미지 파일 정보를 파라미터로 전달
+        }
+    }
+
+    private void createItemImages(List<MultipartFile> itemImgFileList, Item item) throws IOException {
+
+        for(int i = 0; i< itemImgFileList.size(); i++){
+            ItemImg itemImg = new ItemImg();
+            itemImg.setItem(item);
+            if(i == 0){
+                itemImg.updateRepImgYn(StatusEnum.FLAG_Y.getValue()); // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 "Y" 세팅, 나머지 상품 이미지는 "N"으로 설정
+            }else {
+                itemImg.updateRepImgYn(StatusEnum.FLAG_N.getValue());
+            }
+
+            //비즈니스 로직 처리
+            if(!itemImgFileList.get(i).isEmpty()) {
+                itemImgService.saveItemImg(itemImg, itemImgFileList.get(i)); // 상품의 이미지 정보를 저장
+            }
+        }
     }
 }

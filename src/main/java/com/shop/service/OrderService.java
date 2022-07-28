@@ -4,6 +4,9 @@ import com.shop.domain.*;
 import com.shop.dto.OrderDto;
 import com.shop.dto.OrderHisDto;
 import com.shop.dto.OrderItemDto;
+import com.shop.enums.StatusEnum;
+import com.shop.global.error.exception.ErrorCode;
+import com.shop.global.error.exception.ItemNotFoundException;
 import com.shop.repository.ItemImgRepository;
 import com.shop.repository.ItemRepository;
 import com.shop.repository.MemberRepository;
@@ -34,19 +37,15 @@ public class OrderService {
     @Transactional
     public Long order(OrderDto orderDto, String email){
 
-        Item item = itemRepository.findById(orderDto.getItemId()) //주문 할 상품을 조회
-                .orElseThrow(EntityExistsException::new);
-
         List<OrderItem> orderItemList = new ArrayList<>();
-        OrderItem orderItem = OrderItem.create(item, orderDto.getCount()); // 주문할 상품 엔티티와 주문 수량을 이용하여 주문 상품 엔티티를 생성
+        OrderItem orderItem = OrderItem.create(getItem(orderDto), orderDto.getCount()); // 주문할 상품 엔티티와 주문 수량을 이용하여 주문 상품 엔티티를 생성
 
         orderItemList.add(orderItem);
 
         Order order = Order.create(getMember(email), orderItemList);// 회원 정보와 주문할 상품 리스트 정보를 이용하여 주문 엔티티를 생성
+        orderItem.setOrder(order);
 
         orderRepository.save(order); // 생성한 주문 엔티티를 저장
-
-        orderItem.setOrder(order);
 
         return order.getId();
     }
@@ -66,19 +65,22 @@ public class OrderService {
         List<OrderHisDto> orderHisDtoList = new ArrayList<>();
 
         for(Order order : orderList){ // 주문 리스트를 순회 하면서 구매 이력 페이지에 전달할 Dto 생성
+
             OrderHisDto orderHisDto = new OrderHisDto(order);
             List<OrderItem> orderItemList = order.getOrderItemList();
-
-            for(OrderItem orderItem : orderItemList){
-                ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), "Y"); // 주문한 상품의 대표 이미지를 조회
-                OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemImg.getImgUrl());
-                orderHisDto.addOrderItemDto(orderItemDto);
-            }
-
+            addOrderItem(orderHisDto, orderItemList);
             orderHisDtoList.add(orderHisDto);
         }
         return new PageImpl<>(orderHisDtoList, pageable, totalCount); // 페이지 구현 객체를 생성하여 반환
 
+    }
+
+    private void addOrderItem(OrderHisDto orderHisDto, List<OrderItem> orderItemList) {
+        for(OrderItem orderItem : orderItemList){
+            ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), StatusEnum.FLAG_Y.getStatusMessage()); // 주문한 상품의 대표 이미지를 조회
+            OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemImg.getImgUrl());
+            orderHisDto.addOrderItemDto(orderItemDto);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -90,12 +92,7 @@ public class OrderService {
                 .orElseThrow(EntityExistsException::new);
         Member savedMember = order.getMember();
 
-        if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())){
-
-            return false;
-        }
-
-        return true;
+        return StringUtils.equals(curMember.getEmail(), savedMember.getEmail());
     }
 
     /**
@@ -111,6 +108,7 @@ public class OrderService {
     }
 
     // 장바구니에서 주문 생성
+    @Transactional(readOnly = true)
     public Long orders(List<OrderDto> orderDtoList, String email){
 
         Member member = getMember(email);
@@ -118,7 +116,7 @@ public class OrderService {
         List<OrderItem> orderItemList = new ArrayList<>();
 
         for(OrderDto orderDto : orderDtoList){ // 주문할 상품 리스트를 만들어줌
-            Item item = itemRepository.findById(orderDto.getItemId()).orElseThrow(EntityNotFoundException::new);
+            Item item = getItem(orderDto);
 
             orderItemList.add(OrderItem.create(item, orderDto.getCount()));
         }
@@ -129,10 +127,13 @@ public class OrderService {
         orderRepository.save(order); // 주문 데이터 저장
 
         return order.getId();
-
     }
 
+    private Item getItem(OrderDto orderDto) {
 
+        return itemRepository.findById(orderDto.getItemId())
+                .orElseThrow(() -> new ItemNotFoundException(ErrorCode.ITEM_NOT_FOUND.getMessage()));
+    }
 
 
 }

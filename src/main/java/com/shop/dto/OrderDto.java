@@ -31,7 +31,7 @@ public class OrderDto {
     public static OrderDto from(CartItem cartItem){
 
         return OrderDto.builder()
-                .itemId(cartItem.getId())
+                .itemId(cartItem.getItem().getId())
                 .count(cartItem.getCount())
                 .build();
     }

@@ -33,7 +33,7 @@ public class FileService {
 
         File deleteFile = new File(filePath); //파일이 저장된 경로를 이용파여 파일 객체를 생성
 
-        if(deleteFile.exists()){ //해당 파일이 존재하면 파을을 삭제
+        if(deleteFile.exists()){ //해당 파일이 존재하면 파일을 삭제
             deleteFile.delete();
             log.info("파일을 삭제하였습니다.");
         }else {
