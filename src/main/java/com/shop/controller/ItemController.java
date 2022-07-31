@@ -1,7 +1,5 @@
 package com.shop.controller;
 
-
-
 import com.shop.dto.ItemSearchDto;
 import com.shop.dto.form.ItemFormDto;
 import com.shop.domain.Item;
@@ -10,7 +8,6 @@ import com.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -45,7 +41,7 @@ public class ItemController {
     }
 
     @PostMapping(value = "/admin/item/new")
-    public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, List<MultipartFile> itemImgFileList){
+    public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult, Model model, List<MultipartFile> itemImgFileList) throws IOException {
 
         if(bindingResult.hasErrors()){// 상품 등록 시 필수 값이 없다면 다시 상품 등록 페이지로 전환합니다.
             log.info("errors={}", bindingResult);
@@ -57,12 +53,7 @@ public class ItemController {
             return "item/itemForm";
         }
 
-        try {
-            itemService.saveItem(itemFormDto, itemImgFileList); //상품 저장 로직을 호출합니다
-        } catch (IOException e) {
-             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
-            return "item/itemForm";
-        }
+        itemService.saveItem(itemFormDto, itemImgFileList); //상품 저장 로직을 호출합니다
 
         return "redirect:/"; // 상품이 정상적으로 등록되었다면 메인페이지로 이동;
     }

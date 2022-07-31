@@ -17,13 +17,14 @@ public enum ErrorCode {
     // Member
     EMAIL_DUPLICATION(400, "M001", "Email is Duplication"),
     LOGIN_INPUT_INVALID(400, "M002", "Login input is invalid"),
+    EMAIL_NOT_FOUND(400, "M003", "로그인 후 이용해주세요"),
 
 
     // Item
     ITEM_NOT_FOUND(400, "I0001", "존재하지 않는 상품입니다."),
 
     // Stock
-    OUT_OF_STOCK(500, "S0001", "재고가 초가되었습니다."),
+    OUT_OF_STOCK(500, "S0001", "재고가 초과 되었습니다."),
 
     // Board
     BOARD_NOT_FOUND(400, "B0001", "존재하지 않는 게시물입니다."),

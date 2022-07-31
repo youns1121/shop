@@ -17,7 +17,7 @@ import java.io.IOException;
 @Transactional
 public class ItemImgService {
 
-    @Value("C:/shop/images")
+    @Value("D:/shop/images")
     String itemImgLocation;
 
     private final ItemImgRepository itemImgRepository;

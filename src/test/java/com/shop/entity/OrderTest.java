@@ -40,17 +40,6 @@ class OrderTest {
     @PersistenceContext
     EntityManager em;
 
-    public Item createItem(){
-        Item item = new Item();
-        item.setItemName("테스트 상품");
-        item.setPrice(10000);
-        item.setItemDetail("상세설명");
-        item.setItemSellStatus(ItemSellStatus.SELL); // 제품 판매상태
-        item.setStockNumber(100); // 재고수량
-
-
-        return item;
-    }
 
 //    public Order create(){
 //        Order order = new Order();

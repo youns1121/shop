@@ -27,11 +27,11 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping(value = "/order")
     @ResponseBody
+    @PostMapping(value = "/order")
     public ResponseEntity<String> order (@Valid @RequestBody OrderDto orderDto, BindingResult bindingResult, Principal principal) {
 
-        if (bindingResult.hasErrors()) { // 주문 정보를 받는 OrderDto 객체에 데이터 바인딩 시 에러가 있는지 검사
+        if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
             for (FieldError fieldError : fieldErrorList) {
@@ -42,13 +42,7 @@ public class OrderController {
 
 
         String email = principal.getName(); // 현재 로그인 유저의 정보를 얻기 위해 Principal 객체에서 현재 로그인한 회원의 이메일 정보를 조회
-        Long orderId;
-
-        try {
-            orderId = orderService.order(orderDto, email); // 화면으로부터 넘어오는 주문 정보와 회원의 이메일 정보를 이용하여 주문 로직을 호출
-        } catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        Long orderId = orderService.order(orderDto, email); // 화면으로부터 넘어오는 주문 정보와 회원의 이메일 정보를 이용하여 주문 로직을 호출
 
         return new ResponseEntity<>(orderId.toString(), HttpStatus.OK); // 결과값으로 생성된 주문 번호와 요청이 성공했다는 HTTP응 답 상 태 코드를 반환
         }

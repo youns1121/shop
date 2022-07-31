@@ -4,6 +4,7 @@ package com.shop.domain;
 import com.shop.domain.comm.BaseEntity;
 import com.shop.dto.form.ItemFormDto;
 import com.shop.enums.ItemSellStatus;
+import com.shop.global.error.exception.ErrorCode;
 import com.shop.global.error.exception.OutOfStockException;
 import lombok.*;
 
@@ -61,7 +62,7 @@ public class Item extends BaseEntity {
     public void removeStock(int stockNumber){
         int restStock = this.stockNumber - stockNumber; // 상품의 재고 수량에서 주문 후 남은 재고 수량을 구함함
         if(restStock < 0){
-            throw new OutOfStockException("상품의 재고가 부족합니다. (현재 재고 수량: " + this.stockNumber + ")"); // 상품의 재고가 주문 수량보다 작을 경우 재고 부족으로 예외를 발생
+            throw new OutOfStockException(ErrorCode.OUT_OF_STOCK.getMessage()); // 상품의 재고가 주문 수량보다 작을 경우 재고 부족으로 예외를 발생
         }
         this.stockNumber = restStock; // 주문 후 남은 재고 수량을 상품의 현재 재고 값으로 할당;
    }

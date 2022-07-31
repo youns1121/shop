@@ -35,16 +35,12 @@ public class ItemService {
     @Transactional
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws IOException {
 
-        //상품등록
         Item item = itemFormDto.createItem(itemFormDto); // 상품 등록 폼으로부터 입력받은 데이터를 이용하여 item 객체를 생성
         itemRepository.save(item); // 상품 데이터를 저장
 
-        //이미지등록
         createItemImages(itemImgFileList, item);
         return item.getId();
     }
-
-
 
     @Transactional(readOnly = true) // 상품 데이터를 읽어오는 트랜잭션을 읽기 전용 설정, jpa가 변경감지(더티체킹)을 수행하지 않아서 성능을 향상 시킬 수 있음
     public ItemFormDto getItemDtl(Long itemId){
@@ -52,13 +48,9 @@ public class ItemService {
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId); // 해당 상품의 이미지를 등록 아이디 순으로 조회
         List<ItemImgDto> itemImgDtoList = new ArrayList<>();
 
-        for(ItemImg itemImg : itemImgList){ // 조회한 Itemimg 엔티티를 ItemImgDto객체로 만들어서 리스트에 추가
+        addItemImgList(itemImgList, itemImgDtoList);
 
-            itemImgDtoList.add(ItemImgDto.from(itemImg));
-        }
-
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new ItemNotFoundException(ErrorCode.ITEM_NOT_FOUND.getMessage())); // 상품의 아이디를 통해 상품 엔티티를 조회합니다.
+        Item item = getItem(itemId);
 
         ItemFormDto itemFormDto = ItemFormDto.from(item);
         itemFormDto.setItemImgDtoList(itemImgDtoList);
@@ -104,18 +96,42 @@ public class ItemService {
     private void createItemImages(List<MultipartFile> itemImgFileList, Item item) throws IOException {
 
         for(int i = 0; i< itemImgFileList.size(); i++){
+
             ItemImg itemImg = new ItemImg();
             itemImg.setItem(item);
-            if(i == 0){
-                itemImg.updateRepImgYn(StatusEnum.FLAG_Y.getValue()); // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 "Y" 세팅, 나머지 상품 이미지는 "N"으로 설정
-            }else {
-                itemImg.updateRepImgYn(StatusEnum.FLAG_N.getValue());
-            }
 
-            //비즈니스 로직 처리
-            if(!itemImgFileList.get(i).isEmpty()) {
-                itemImgService.saveItemImg(itemImg, itemImgFileList.get(i)); // 상품의 이미지 정보를 저장
-            }
+            firstImgYn(i, itemImg);
+            saveItemImg(itemImgFileList, i, itemImg);
         }
+    }
+
+    private void firstImgYn(int i, ItemImg itemImg) {
+
+        if(i == 0){
+            itemImg.updateRepImgYn(StatusEnum.FLAG_Y.getValue()); // 첫 번째 이미지일 경우 대표 상품 이미지 여부 값을 "Y" 세팅, 나머지 상품 이미지는 "N"으로 설정
+        }else {
+            itemImg.updateRepImgYn(StatusEnum.FLAG_N.getValue());
+        }
+    }
+
+    private void saveItemImg(List<MultipartFile> itemImgFileList, int i, ItemImg itemImg) throws IOException {
+
+        if(!itemImgFileList.get(i).isEmpty()) {
+            itemImgService.saveItemImg(itemImg, itemImgFileList.get(i)); // 상품의 이미지 정보를 저장
+        }
+    }
+
+    private void addItemImgList(List<ItemImg> itemImgList, List<ItemImgDto> itemImgDtoList) {
+
+        for(ItemImg itemImg : itemImgList){
+
+            itemImgDtoList.add(ItemImgDto.from(itemImg));
+        }
+    }
+
+    private Item getItem(Long itemId) {
+
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new ItemNotFoundException(ErrorCode.ITEM_NOT_FOUND.getMessage()));
     }
 }

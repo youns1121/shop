@@ -8,8 +8,6 @@ import lombok.Setter;
 @Setter
 public class OrderItemDto { // 조회한 주문 데이터를 화면에 보낼 때 사용
 
-
-
     private String itemName; //상품명
 
     private int count; // 주문 수량

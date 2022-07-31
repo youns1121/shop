@@ -5,6 +5,7 @@ import com.shop.dto.OrderDto;
 import com.shop.dto.OrderHisDto;
 import com.shop.dto.OrderItemDto;
 import com.shop.enums.StatusEnum;
+import com.shop.global.error.exception.EmailNotFoundException;
 import com.shop.global.error.exception.ErrorCode;
 import com.shop.global.error.exception.ItemNotFoundException;
 import com.shop.repository.ItemImgRepository;
@@ -37,23 +38,19 @@ public class OrderService {
     @Transactional
     public Long order(OrderDto orderDto, String email){
 
-        List<OrderItem> orderItemList = new ArrayList<>();
         OrderItem orderItem = OrderItem.create(getItem(orderDto), orderDto.getCount()); // 주문할 상품 엔티티와 주문 수량을 이용하여 주문 상품 엔티티를 생성
 
+        List<OrderItem> orderItemList = new ArrayList<>();
         orderItemList.add(orderItem);
 
         Order order = Order.create(getMember(email), orderItemList);// 회원 정보와 주문할 상품 리스트 정보를 이용하여 주문 엔티티를 생성
         orderItem.setOrder(order);
-
-        orderRepository.save(order); // 생성한 주문 엔티티를 저장
+        orderRepository.save(order);
 
         return order.getId();
     }
 
-    private Member getMember(String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("로그인 후 이용해주세요"));
-    }
+
 
     //주문목록 조회 로직
     @Transactional(readOnly = true)
@@ -75,13 +72,7 @@ public class OrderService {
 
     }
 
-    private void addOrderItem(OrderHisDto orderHisDto, List<OrderItem> orderItemList) {
-        for(OrderItem orderItem : orderItemList){
-            ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), StatusEnum.FLAG_Y.getStatusMessage()); // 주문한 상품의 대표 이미지를 조회
-            OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemImg.getImgUrl());
-            orderHisDto.addOrderItemDto(orderItemDto);
-        }
-    }
+
 
     @Transactional(readOnly = true)
     public boolean validateOrder(Long orderId, String email){ //현재 로그인한 사용자와 주문 데이터를 생성한 사용자가 같은지 검사
@@ -99,6 +90,7 @@ public class OrderService {
      * 주문 취소
      * @param orderId
      */
+    @Transactional(readOnly = true)
     public void cancelOrder(Long orderId){
 
         Order order = orderRepository.findById(orderId)
@@ -111,23 +103,18 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Long orders(List<OrderDto> orderDtoList, String email){
 
-        Member member = getMember(email);
-
         List<OrderItem> orderItemList = new ArrayList<>();
 
-        for(OrderDto orderDto : orderDtoList){ // 주문할 상품 리스트를 만들어줌
-            Item item = getItem(orderDto);
+        addOrderItemList(orderDtoList, orderItemList);
 
-            orderItemList.add(OrderItem.create(item, orderDto.getCount()));
-        }
-
-
-        Order order = Order.create(member, orderItemList); // 현재 로그인한 회원과 주문 상품 목록을 이용하여 주문 엔티티를 만들어줌
+        Order order = Order.create(getMember(email), orderItemList); // 현재 로그인한 회원과 주문 상품 목록을 이용하여 주문 엔티티를 만들어줌
 
         orderRepository.save(order); // 주문 데이터 저장
 
         return order.getId();
     }
+
+
 
     private Item getItem(OrderDto orderDto) {
 
@@ -135,5 +122,23 @@ public class OrderService {
                 .orElseThrow(() -> new ItemNotFoundException(ErrorCode.ITEM_NOT_FOUND.getMessage()));
     }
 
+    private Member getMember(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new EmailNotFoundException(ErrorCode.EMAIL_NOT_FOUND.getMessage()));
+    }
 
+    private void addOrderItem(OrderHisDto orderHisDto, List<OrderItem> orderItemList) {
+        for(OrderItem orderItem : orderItemList){
+            ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), StatusEnum.FLAG_Y.getStatusMessage()); // 주문한 상품의 대표 이미지를 조회
+            OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemImg.getImgUrl());
+            orderHisDto.addOrderItemDto(orderItemDto);
+        }
+    }
+
+    private void addOrderItemList(List<OrderDto> orderDtoList, List<OrderItem> orderItemList) {
+        for(OrderDto orderDto : orderDtoList){ // 주문할 상품 리스트를 만들어줌
+
+            orderItemList.add(OrderItem.create(getItem(orderDto), orderDto.getCount()));
+        }
+    }
 }
