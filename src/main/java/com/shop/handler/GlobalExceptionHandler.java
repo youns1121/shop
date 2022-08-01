@@ -2,10 +2,7 @@ package com.shop.handler;
 
 import com.shop.dto.form.ItemFormDto;
 import com.shop.global.error.ErrorResponse;
-import com.shop.global.error.exception.BoardNotFoundException;
-import com.shop.global.error.exception.ErrorCode;
-import com.shop.global.error.exception.ItemNotFoundException;
-import com.shop.global.error.exception.OutOfStockException;
+import com.shop.global.error.exception.*;
 import com.shop.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,10 +45,19 @@ public class GlobalExceptionHandler {
 
         mav.addObject("boardList", boardService.getBoardList());
         mav.addObject("error", e.getMessage());
-
         mav.setViewName("/board/boardlist");
 
         return mav;
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    protected ModelAndView handleOrderNotFoundException(OrderNotFoundException e){
+
+        log.error("handleOrderNotFoundException", e);
+
+        return null;
+
+
     }
 
     @ExceptionHandler(ItemNotFoundException.class)

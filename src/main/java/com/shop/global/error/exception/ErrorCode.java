@@ -20,6 +20,9 @@ public enum ErrorCode {
     EMAIL_NOT_FOUND(400, "M003", "로그인 후 이용해주세요"),
 
 
+    // Order
+    ORDER_NOT_FOUND(400, "O0001", "주문을 찾을 수 없습니다."),
+
     // Item
     ITEM_NOT_FOUND(400, "I0001", "존재하지 않는 상품입니다."),
 

@@ -39,7 +39,6 @@ public class Item extends BaseEntity {
     @Column(name = "item_sell_status")
     private ItemSellStatus itemSellStatus; //상품 판매상태
 
-
     @Builder
     public Item(Long id, String itemName, int price, int stockNumber, String itemDetail, ItemSellStatus itemSellStatus) {
         this.id = id;

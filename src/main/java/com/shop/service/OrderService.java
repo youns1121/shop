@@ -4,14 +4,17 @@ import com.shop.domain.*;
 import com.shop.dto.OrderDto;
 import com.shop.dto.OrderHisDto;
 import com.shop.dto.OrderItemDto;
+import com.shop.dto.response.OrderDetailResponseDto;
 import com.shop.enums.StatusEnum;
 import com.shop.global.error.exception.EmailNotFoundException;
 import com.shop.global.error.exception.ErrorCode;
 import com.shop.global.error.exception.ItemNotFoundException;
+import com.shop.global.error.exception.OrderNotFoundException;
 import com.shop.repository.ItemImgRepository;
 import com.shop.repository.ItemRepository;
 import com.shop.repository.MemberRepository;
 import com.shop.repository.OrderRepository;
+import com.shop.repository.custom.OrderRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -34,6 +37,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final ItemImgRepository itemImgRepository;
+    private final OrderRepositoryCustom orderRepositoryCustom;
 
     @Transactional
     public Long order(OrderDto orderDto, String email){
@@ -50,6 +54,11 @@ public class OrderService {
         return order.getId();
     }
 
+    @Transactional(readOnly = true)
+    public OrderDetailResponseDto getOrderDetail(String orderId){
+
+        return orderRepositoryCustom.getOrderDetail(orderId);
+    }
 
 
     //주문목록 조회 로직
@@ -73,7 +82,6 @@ public class OrderService {
     }
 
 
-
     @Transactional(readOnly = true)
     public boolean validateOrder(Long orderId, String email){ //현재 로그인한 사용자와 주문 데이터를 생성한 사용자가 같은지 검사
 
@@ -90,14 +98,14 @@ public class OrderService {
      * 주문 취소
      * @param orderId
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public void cancelOrder(Long orderId){
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(EntityExistsException::new);
+        Order order = getOrder(orderId);
 
         order.cancelOrder(); // 주문 취소 상태로 변경하면 변경 감지 기능에 의해서 트랜잭션이 끝날 때 update 쿼리가 실행됨
     }
+
 
     // 장바구니에서 주문 생성
     @Transactional(readOnly = true)
@@ -140,5 +148,10 @@ public class OrderService {
 
             orderItemList.add(OrderItem.create(getItem(orderDto), orderDto.getCount()));
         }
+    }
+
+    private Order getOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(ErrorCode.ORDER_NOT_FOUND.getMessage()));
     }
 }

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<!-- 사용자 스크립트 추가 -->
+
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .content-mg{
+            margin-left:25%;
+            margin-right:25%;
+            margin-top:2%;
+            margin-bottom:100px;
+        }
+        .repImgDiv{
+            margin-right:15px;
+            margin-left:15px;
+            height:auto;
+        }
+        .repImg{
+            height:100px;
+            width:100px;
+        }
+        .fs18{
+            font-size:18px
+        }
+        .fs24{
+            font-size:24px
+        }
+    </style>
+</th:block>
+
+<div  th:object="${orderDetail}" layout:fragment="content" class="content-mg">
+
+    <h2 class="mb-4">
+        주문 상세
+    </h2>
+    <div >
+        <table class="table">
+            <colgroup>
+                <col width="15%"/>
+                <col width="70%"/>
+                <col width="15%"/>
+            </colgroup>
+            <thead>
+            <tr class="text-center">
+                <td>주문자 이름</td>
+                <td>주문자 정보</td>
+                <td>주소</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="text-center align-middle">
+                    <a th:text="${orderDetail.memberName}"></a>
+                </td>
+                <td class="d-flex">
+                    <a th:text="${orderDetail.memberAddress}"></a>
+                </td>
+                <td class="text-center align-middle">
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h2 class="text-center">
+        </h2>
+
+        <div class="text-center mt-3">
+        </div>
+
+    </div>
+
+    <div>
+
+        <table class="table">
+<!--            <colgroup>-->
+<!--                <col width="15%"/>-->
+<!--                <col width="70%"/>-->
+<!--                <col width="15%"/>-->
+<!--            </colgroup>-->
+            <thead>
+            <tr class="text-center">
+                <td></td>
+                <td>주문 정보</td>
+                <td>주문 금액</td>
+                <td>주문 시간</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <img class = "rounded repImg" th:src="${orderDetail.imgUrl}" th:alt="${orderDetail.imgName}">
+                </td>
+                <td class="d-flex">
+                    <div class="repImgDiv align-self-center">
+                        <a th:text="${orderDetail.itemName}"></a>
+                        <a>*</a>
+                        <a th:text="${orderDetail.orderCount}"></a>
+                        <a>EA</a>
+                    </div>
+                </td>
+                <td class="repImgDiv align-self-center">
+                    <a th:text="${#numbers.formatInteger(orderDetail.orderPrice, 3, 'COMMA') + '원'}" ></a>
+                </td>
+                <td>
+                    <a th:text="${#temporals.format(orderDetail.createTime, 'yyyy-MM-dd HH:mm')}"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="button" th:onclick="|location.href='@{/}'|" >메인화면</button>
+
+</div>
+
+</html>

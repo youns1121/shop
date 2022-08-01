@@ -40,7 +40,6 @@
 
     function order(){
 
-
         let result = confirm('주문 하시겠습니까?');
 
         if(result) {
@@ -67,7 +66,7 @@
               cache: false,
               success: function (result, status) { // 주문 로직 호출이 성공하면 '주문이 완료 되었습니다. 라는 메시지를 보여주고 메인으로 이동
                 alert("주문이 완료 되었습니다.");
-                location.href = '/';
+                location.href = '/order/detail/' + result;
               },
               error: function (jqXHR, status, error) {
                 if (jqXHR.status == '401') { // 현재 로그인 상태가 아니라면 메시지를 보여주고 메인으로 이동

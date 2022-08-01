@@ -7,7 +7,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -75,7 +74,7 @@ public class Order extends BaseEntity{
 
     public void cancelOrder(){ //주문 상태를 취소 상태로 바꿔주는 메소드
 
-        this.orderStatus = OrderStatus.CANCEL;
+        this.orderStatus = OrderStatus.ORDER_CANCEL;
 
         for(OrderItem orderItem : orderItemList){
 
