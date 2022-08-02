@@ -73,7 +73,7 @@
                 <th:block th:if="${order.orderStatus == T(com.shop.enums.OrderStatus).ORDER}">
                     <button type="button" class="btn btn-outline-secondary" th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문취소</button> <!--주문 취소 버튼을 클릭했을 때 cancelOrder 함수를 호출하도록 onclick 속성 추가-->
                 </th:block>
-                <th:block th:unless="${order.orderStatus == T(com.shop.enums.OrderStatus).ORDER_CANCEL}">
+                <th:block th:unless="${order.orderStatus == T(com.shop.enums.OrderStatus).ORDER}">
                     <h4>(취소 완료)</h4>
                 </th:block>
             </div>

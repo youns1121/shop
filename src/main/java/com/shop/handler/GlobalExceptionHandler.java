@@ -1,11 +1,13 @@
 package com.shop.handler;
 
 import com.shop.dto.form.ItemFormDto;
+import com.shop.dto.request.BoardRequestDto;
 import com.shop.global.error.ErrorResponse;
 import com.shop.global.error.exception.*;
 import com.shop.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -37,13 +39,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BoardNotFoundException.class)
-    protected ModelAndView handleBoardNotFoundException(BoardNotFoundException e){
+    protected ModelAndView handleBoardNotFoundException(BoardNotFoundException e, Pageable pageable){
 
         log.error("handleBoardNotFoundException", e);
 
         ModelAndView mav = new ModelAndView();
-
-        mav.addObject("boardList", boardService.getBoardList());
+        mav.addObject("boardList", boardService.getBoardSearchList(BoardRequestDto.builder().build(), pageable));
         mav.addObject("error", e.getMessage());
         mav.setViewName("/board/boardlist");
 

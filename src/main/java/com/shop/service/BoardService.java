@@ -74,12 +74,6 @@ public class BoardService {
         return BoardResponseDto.of(board, boardFileDtoList);
     }
 
-    @Transactional(readOnly = true)
-    public List<BoardResponseDto> getBoardList(){
-
-        return BoardResponseDto.from(boardRepository.findByDelYn(StatusEnum.FLAG_N.getStatusMessage()));
-    }
-
     public Page<BoardResponsePagingDto> getBoardSearchList(BoardRequestDto boardRequestDto, Pageable pageable){
 
         return boardRepositoryCustom.getSearchBoardPage(boardRequestDto, pageable);

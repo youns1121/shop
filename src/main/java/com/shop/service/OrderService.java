@@ -5,6 +5,9 @@ import com.shop.dto.OrderDto;
 import com.shop.dto.OrderHisDto;
 import com.shop.dto.OrderItemDto;
 import com.shop.dto.response.OrderDetailResponseDto;
+import com.shop.dto.response.OrderInfoResponseDto;
+import com.shop.dto.response.OrderItemResponseListDto;
+import com.shop.dto.response.OrderMemberInfoResponseDto;
 import com.shop.enums.StatusEnum;
 import com.shop.global.error.exception.EmailNotFoundException;
 import com.shop.global.error.exception.ErrorCode;
@@ -25,6 +28,7 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,9 +59,26 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public OrderDetailResponseDto getOrderDetail(String orderId){
+    public OrderInfoResponseDto getOrderDetail(Long orderId){
 
-        return orderRepositoryCustom.getOrderDetail(orderId);
+        List<OrderItemResponseListDto> orderItemResponseListDtoList = orderRepositoryCustom.getOrderDetail(orderId);
+        OrderMemberInfoResponseDto orderMember = orderRepositoryCustom.getOrderMember(orderId);
+
+        Integer totalOrderSum = orderSum(orderItemResponseListDtoList);
+
+
+        return  new OrderInfoResponseDto(orderItemResponseListDtoList, orderMember, totalOrderSum);
+    }
+
+    private Integer orderSum(List<OrderItemResponseListDto> orderItemResponseListDtoList) {
+
+        int total = 0;
+        for(OrderItemResponseListDto orderItemResponseListDto : orderItemResponseListDtoList){
+
+            total += orderItemResponseListDto.getOrderCount() * orderItemResponseListDto.getOrderPrice();
+        }
+
+        return total;
     }
 
 
@@ -113,9 +134,9 @@ public class OrderService {
 
         List<OrderItem> orderItemList = new ArrayList<>();
 
-        addOrderItemList(orderDtoList, orderItemList);
-
         Order order = Order.create(getMember(email), orderItemList); // 현재 로그인한 회원과 주문 상품 목록을 이용하여 주문 엔티티를 만들어줌
+
+        addOrderItemList(orderDtoList, orderItemList, order);
 
         orderRepository.save(order); // 주문 데이터 저장
 
@@ -143,10 +164,12 @@ public class OrderService {
         }
     }
 
-    private void addOrderItemList(List<OrderDto> orderDtoList, List<OrderItem> orderItemList) {
+    private void addOrderItemList(List<OrderDto> orderDtoList, List<OrderItem> orderItemList, Order order) {
         for(OrderDto orderDto : orderDtoList){ // 주문할 상품 리스트를 만들어줌
 
-            orderItemList.add(OrderItem.create(getItem(orderDto), orderDto.getCount()));
+            OrderItem orderItem = OrderItem.create(getItem(orderDto), orderDto.getCount());
+            orderItem.setOrder(order);
+            orderItemList.add(orderItem);
         }
     }
 

@@ -100,7 +100,6 @@ public class BoardController {
     @GetMapping("/update/{id}")
     public String updateBoard(@PathVariable("id") Long id, Model model){
 
-
         BoardResponseDto findBoardDetail = boardService.getBoardDetail(id);
 
         model.addAttribute("board", findBoardDetail);

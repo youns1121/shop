@@ -38,7 +38,6 @@ public class CartController {
             }
 
             return new ResponseEntity<>(sb.toString(), HttpStatus.BAD_REQUEST);
-
         }
 
         String email = principal.getName(); // 현재 로그인한 회원의 이메일 정보를 변수에 저장합니다.
@@ -99,9 +98,8 @@ public class CartController {
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
     }
 
-    //장바구니 상품의 수량을 업데이트 하는 요청을 처리할 수 있도록 로직 추가
-    @PostMapping(value = "/cart/orders")
     @ResponseBody
+    @PostMapping(value = "/cart/orders")
     public ResponseEntity<String> orderCartItem(@RequestBody CartOrderDto cartOrderDto, Principal principal){
 
         List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
@@ -120,7 +118,6 @@ public class CartController {
         Long orderId = cartService.orderCartItem(cartOrderDtoList, principal.getName()); // 주문 로직 호출 결과 생성된 주문 번호를 반환
 
         return new ResponseEntity<String>(orderId.toString(), HttpStatus.OK); // 생성된 주문 번호와 요청이 생공했다는 HTTP 응답 상태 코드를 반환
-
     }
 
 

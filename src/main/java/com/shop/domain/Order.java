@@ -24,14 +24,14 @@ public class Order extends BaseEntity{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="memeber_id")
+    @JoinColumn(name="member_id")
     private Member member;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true) // 부모 엔티티의 영속성 상태 변화를 자식 엔티티에 모두 전이, 고아 객체 제거
     private List<OrderItem> orderItemList;
 
     @Column(name = "order_date")
-    private LocalDateTime orderDate; //주문일
+    private LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name="order_status")

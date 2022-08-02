@@ -10,5 +10,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Optional<Board> findByBoardIdAndDelYn(Long id, String delYn);
 
-    List<Board> findByDelYn(String delYn);
+    List<Board> findByDelYnOrderByCreateTimeDesc(String delYn);
 }

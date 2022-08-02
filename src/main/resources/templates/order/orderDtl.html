@@ -53,20 +53,17 @@
             <thead>
             <tr class="text-center">
                 <td>주문자 이름</td>
-                <td>주문자 정보</td>
                 <td>주소</td>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td class="text-center align-middle">
-                    <a th:text="${orderDetail.memberName}"></a>
+                    <a th:text="${orderDetail.orderMemberInfoResponseDto.memberName}"></a>
                 </td>
-                <td class="d-flex">
-                    <a th:text="${orderDetail.memberAddress}"></a>
-                </td>
-                <td class="text-center align-middle">
 
+                <td class="text-center align-middle">
+                    <a th:text="${orderDetail.orderMemberInfoResponseDto.memberAddress}"></a>
                 </td>
             </tr>
             </tbody>
@@ -91,32 +88,52 @@
             <thead>
             <tr class="text-center">
                 <td></td>
-                <td>주문 정보</td>
+                <td>제품 정보</td>
+                <td>주문 단가</td>
+                <td>주문 개수</td>
                 <td>주문 금액</td>
                 <td>주문 시간</td>
             </tr>
             </thead>
             <tbody>
-            <tr>
+            <tr th:each="orderInfo : ${orderDetail.orderItemResponseListDtoList}">
                 <td>
-                    <img class = "rounded repImg" th:src="${orderDetail.imgUrl}" th:alt="${orderDetail.imgName}">
+                    <img class = "rounded repImg" th:src="${orderInfo.imgUrl}" th:alt="${orderInfo.imgName}">
                 </td>
                 <td class="d-flex">
                     <div class="repImgDiv align-self-center">
-                        <a th:text="${orderDetail.itemName}"></a>
-                        <a>*</a>
-                        <a th:text="${orderDetail.orderCount}"></a>
-                        <a>EA</a>
+                        <a th:text="${orderInfo.itemName}"></a>
                     </div>
                 </td>
-                <td class="repImgDiv align-self-center">
-                    <a th:text="${#numbers.formatInteger(orderDetail.orderPrice, 3, 'COMMA') + '원'}" ></a>
+                <td>
+                    <a th:text="${#numbers.formatInteger(orderInfo.orderPrice, 3, 'COMMA') + '원'}"></a>
                 </td>
                 <td>
-                    <a th:text="${#temporals.format(orderDetail.createTime, 'yyyy-MM-dd HH:mm')}"></a>
+                    <a th:text="${orderInfo.orderCount}"></a>
+                    <a>EA</a>
+                </td>
+                <td class="repImgDiv align-self-center">
+                    <a
+                            th:text="${#numbers.formatInteger(orderInfo.orderPrice * orderInfo.orderCount, 3, 'COMMA') + '원'}"
+                    ></a>
+                </td>
+                <td>
+                    <a th:text="${#temporals.format(orderInfo.createTime, 'yyyy-MM-dd HH:mm')}"></a>
                 </td>
             </tr>
             </tbody>
+            <tfoot>
+            <tr>
+                <td>합계: </td>
+            </tr>
+            <tr>
+                <td>
+
+
+                    <a th:text="${#numbers.formatInteger(orderDetail.orderSum, 3, 'COMMA') + '원'}"></a>
+                </td>
+            </tr>
+            </tfoot>
         </table>
     </div>
     <button type="button" th:onclick="|location.href='@{/}'|" >메인화면</button>

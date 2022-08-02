@@ -3,6 +3,7 @@ package com.shop.controller;
 import com.shop.dto.OrderDto;
 import com.shop.dto.OrderHisDto;
 import com.shop.dto.response.OrderDetailResponseDto;
+import com.shop.dto.response.OrderInfoResponseDto;
 import com.shop.enums.BoardEnum;
 import com.shop.enums.OrderStatus;
 import com.shop.service.OrderService;
@@ -66,9 +67,9 @@ public class OrderController {
     }
 
     @GetMapping("/order/detail/{orderid}")
-    public String orderDtl(@PathVariable("orderid") String orderId, Model model){
+    public String orderDtl(@PathVariable("orderid") Long orderId, Model model){
 
-        OrderDetailResponseDto orderDetail = orderService.getOrderDetail(orderId);
+        OrderInfoResponseDto orderDetail = orderService.getOrderDetail(orderId);
         model.addAttribute("orderDetail", orderDetail);
 
         return "order/orderDtl";
@@ -87,7 +88,4 @@ public class OrderController {
 
         return new ResponseEntity<>(orderId.toString(), HttpStatus.OK);
     }
-
-
-
 }

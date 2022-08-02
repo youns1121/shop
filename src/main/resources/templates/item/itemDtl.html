@@ -25,7 +25,6 @@
           calculateToalPrice();
         }else{
           count.val('100')
-          alert('최대 수량은 100개 입니다.')
           calculateToalPrice();
         }
       });
@@ -104,7 +103,6 @@
         cache   : false,
         success  : function(result, status){
           alert("상품을 장바구니에 담았습니다.");
-          location.href='/';
         },
         error : function(jqXHR, status, error){
 
@@ -162,7 +160,7 @@
       <hr class="my-4">
 
       <div class="text-right mgt-50">
-        <h5>결제 금액</h5>
+        <h5>주문 금액</h5>
         <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>
       </div>
       <div th:if="${item.itemSellStatus == T(com.shop.enums.ItemSellStatus).SELL}" class="text-right">

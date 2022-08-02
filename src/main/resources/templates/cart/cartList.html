@@ -36,7 +36,7 @@
             var cartItemId = obj.id.split('_')[1];
             var price = $("#price_" + cartItemId).data("price");
             var totalPrice = count*price;
-            $("#totalPrice_" + cartItemId).html(totalPrice+"원");
+            $("#totalPrice_" + cartItemId).html(totalPrice.toLocaleString('en-US') + '원');
             getOrderTotalPrice();
             updateCartItemCount(cartItemId, count);
         }
@@ -144,7 +144,7 @@
                 cache   : false,
                 success  : function(result, status){
                     alert("주문이 완료 되었습니다.");
-                    location.href='/orders'; // 주문 요청 결과 성공하였다면 구매이력 페이지로 이동
+                    location.href='/order/detail/' + result; // 주문 요청 결과 성공하였다면 구매이력 페이지로 이동
                 },
                 error : function(jqXHR, status, error){
 
