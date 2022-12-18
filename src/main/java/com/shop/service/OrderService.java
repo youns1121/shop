@@ -4,7 +4,6 @@ import com.shop.domain.*;
 import com.shop.dto.OrderDto;
 import com.shop.dto.OrderHisDto;
 import com.shop.dto.OrderItemDto;
-import com.shop.dto.response.OrderDetailResponseDto;
 import com.shop.dto.response.OrderInfoResponseDto;
 import com.shop.dto.response.OrderItemResponseListDto;
 import com.shop.dto.response.OrderMemberInfoResponseDto;
@@ -27,8 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 

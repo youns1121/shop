@@ -24,7 +24,8 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping(value = "/cart")
-    public @ResponseBody ResponseEntity order(@RequestBody @Valid CartItemDto cartItemDto,
+    @ResponseBody
+    public  ResponseEntity order(@RequestBody @Valid CartItemDto cartItemDto,
                                               BindingResult bindingResult, Principal principal) {
 
         if (bindingResult.hasErrors()) { //장바구니에 담을 상품 정보를 받는 cartItemDto 객체에 데이터 바인딩 시 에러가 있는지 검사
@@ -65,7 +66,8 @@ public class CartController {
     }
 
     @PatchMapping(value = "/cartItem/{cartItemId}") // 장바구니 상품의 수량만 업데이트
-    public @ResponseBody ResponseEntity updateCartItem(@PathVariable("cartItemId") Long cartItemId, int count, Principal principal){
+    @ResponseBody
+    public ResponseEntity updateCartItem(@PathVariable("cartItemId") Long cartItemId, int count, Principal principal){
 
         if(count <= 0){ // 0개이하로 업데이트 요청시 에러 메시지를 담아 반환
             return new ResponseEntity<>("최소 1개 이상 담아주세요", HttpStatus.BAD_REQUEST);
@@ -87,7 +89,8 @@ public class CartController {
      * @return
      */
     @DeleteMapping(value = "/cartItem/{cartItemId}")
-    public @ResponseBody ResponseEntity deleteCartItem(@PathVariable("cartItemId") Long cartItemId, Principal principal){
+    @ResponseBody
+    public ResponseEntity deleteCartItem(@PathVariable("cartItemId") Long cartItemId, Principal principal){
 
         if(!cartService.validateCartItem(cartItemId, principal.getName())){ //수정권한 체크
 
@@ -98,8 +101,8 @@ public class CartController {
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
     }
 
-    @ResponseBody
     @PostMapping(value = "/cart/orders")
+    @ResponseBody
     public ResponseEntity<String> orderCartItem(@RequestBody CartOrderDto cartOrderDto, Principal principal){
 
         List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
@@ -119,7 +122,4 @@ public class CartController {
 
         return new ResponseEntity<String>(orderId.toString(), HttpStatus.OK); // 생성된 주문 번호와 요청이 생공했다는 HTTP 응답 상태 코드를 반환
     }
-
-
-
 }

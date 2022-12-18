@@ -8,6 +8,7 @@
 
   <script th:inline="javascript">
     $(document).ready(function(){
+
       var error = [[${error}]];
       if(error != null){
         alert(error);
@@ -16,11 +17,8 @@
     });
   </script>
 
+
   <script>
-
-
-
-
     let data ={
       boardEnum : $('#boardEnum').val(),
       searchName : $('#searchQuery').val()
@@ -85,12 +83,12 @@
           >
 
           </td>
+
           <td th:text="${board.memberName}"></td>
           <td th:text="${#temporals.format(board.createTime, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>
       </tbody>
     </table>
-
   </form>
 </div>
 </html>

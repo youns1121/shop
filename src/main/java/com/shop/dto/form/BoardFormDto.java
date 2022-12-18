@@ -1,7 +1,6 @@
 package com.shop.dto.form;
 
 import com.shop.domain.Board;
-import com.shop.domain.Board;
 import com.shop.domain.Member;
 import lombok.Builder;
 import lombok.Getter;

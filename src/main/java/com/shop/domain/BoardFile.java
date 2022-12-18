@@ -5,7 +5,6 @@ import com.shop.dto.BoardFileDto;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @EqualsAndHashCode(of = "boardFileId")
 @Getter

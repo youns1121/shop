@@ -2,6 +2,8 @@ package com.shop.repository.custom;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
+
 import com.shop.domain.QCartItem;
 import com.shop.domain.QItem;
 import com.shop.domain.QItemImg;

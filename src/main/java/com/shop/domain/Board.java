@@ -5,7 +5,6 @@ import com.shop.dto.BoardUpdateDto;
 import com.shop.dto.form.BoardFormDto;
 import com.shop.enums.StatusEnum;
 import lombok.*;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.List;
