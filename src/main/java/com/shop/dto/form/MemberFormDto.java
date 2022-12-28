@@ -33,4 +33,6 @@ public class MemberFormDto {
     private String phoneNum2;
 
     private String phoneNum3;
+
+    private String picture;
 }
