@@ -1,11 +1,6 @@
-
-
-
-
 #그룹화
 spring:
   profiles:
-    include: oauth
     group:
       "local": "local,common"
       "test": "test,common"
@@ -18,7 +13,7 @@ spring:
       on-profile: "common"
 
 server:
-  port: 8081
+  port: 8080
   servlet:
     encoding:
       charset: UTF-8
@@ -50,14 +45,6 @@ spring:
       max-file-size: 20MB #파일 한 개당 최대 사이즈
       max-request-size: 100MB # 요청당 최대 파일 크기
 
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 509664271132-vi5cn8d14sq7po6cfagmfjdue12h1o08.apps.googleusercontent.com
-            client-secret: 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
-            scope: profile, email
 
   config:
     activate:
