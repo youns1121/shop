@@ -27,7 +27,7 @@ public class BoardFileService {
 
     private final BoardFileRepository boardFileRepository;
 
-    @Value("D:/shop/board/")
+    @Value("C:/shop/board/")
     private String uploadPath;
 
     @Transactional

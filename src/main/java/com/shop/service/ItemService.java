@@ -34,14 +34,14 @@ public class ItemService {
     @Transactional
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws IOException {
 
-        Item item = itemFormDto.createItem(itemFormDto); // 상품 등록 폼으로부터 입력받은 데이터를 이용하여 item 객체를 생성
-        itemRepository.save(item); // 상품 데이터를 저장
+        Item item = itemFormDto.createItem(itemFormDto);
+        itemRepository.save(item);
 
         createItemImages(itemImgFileList, item);
         return item.getId();
     }
 
-    @Transactional(readOnly = true) // 상품 데이터를 읽어오는 트랜잭션을 읽기 전용 설정, jpa가 변경감지(더티체킹)을 수행하지 않아서 성능을 향상 시킬 수 있음
+    @Transactional(readOnly = true)
     public ItemFormDto getItemDtl(Long itemId){
 
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId); // 해당 상품의 이미지를 등록 아이디 순으로 조회

@@ -6,7 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@EqualsAndHashCode(of = "boardFileId")
+@EqualsAndHashCode(of = "boardFileId", callSuper=false)
 @Getter
 @NoArgsConstructor
 @Table(name = "board_file")

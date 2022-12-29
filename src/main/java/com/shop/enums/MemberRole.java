@@ -1,17 +1,23 @@
 package com.shop.enums;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
 @AllArgsConstructor
-public enum MemberRole {
-    GUEST("ROLE_GUEST", "손님"),
-    USER("ROLE_USER", "일반 사용자"),
-    ADMIN("ROLE_ADMIN", "관리자")
-    ;
+public enum MemberRole implements EnumModel{
+    USER("회원", "01"),
+    ADMIN("관리자", "02");
 
     private final String key;
 
     private final String value;
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public String getValue() {
+        return value;
+    }
 }

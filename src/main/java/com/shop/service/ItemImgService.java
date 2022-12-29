@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Service
@@ -17,7 +18,7 @@ import java.io.IOException;
 @Transactional
 public class ItemImgService {
 
-    @Value("D:/shop/images")
+    @Value("C:/shop/images")
     String itemImgLocation;
 
     private final ItemImgRepository itemImgRepository;
@@ -36,7 +37,7 @@ public class ItemImgService {
 
         if(!StringUtils.hasText(oriImgName)){
 
-            throw new IllegalStateException("파일이 존재하지 않습니다.");
+            throw new FileNotFoundException("파일이 존재하지 않습니다.");
         }
 
         String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());

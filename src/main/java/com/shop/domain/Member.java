@@ -35,9 +35,6 @@ public class Member extends BaseEntity {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "picture")
-    private String picture;
-
     @Column(name = "address")
     private String address;
 
@@ -52,40 +49,21 @@ public class Member extends BaseEntity {
     private PhoneNumber phoneNumber;
 
     @Builder
-    public Member(Long id, String name, String email, String password, String picture, String address, MemberRole memberRole, Address addressAttr, PhoneNumber phoneNumber) {
+    public Member(Long id, String name, String email, String password, String address, MemberRole memberRole, Address addressAttr, PhoneNumber phoneNumber) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.picture = picture;
         this.address = address;
         this.memberRole = memberRole;
         this.addressAttr = addressAttr;
         this.phoneNumber = phoneNumber;
     }
 
+
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
 
-        return Member.builder()
-                .name(memberFormDto.getName())
-                .email(memberFormDto.getEmail())
-                .address(memberFormDto.getAddress())
-                .password(memberFormDto.getPassword())
-                .memberRole(MemberRole.ADMIN)
-                .password(passwordEncoder.encode(memberFormDto.getPassword()))
-                .phoneNumber(PhoneNumber.create(memberFormDto.getPhoneNum1(), memberFormDto.getPhoneNum2(), memberFormDto.getPhoneNum3()))
-                .picture(memberFormDto.getPicture())
-                .build();
-    }
-
-    public Member update(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
-
-        return this;
-    }
-
-    public Member updateMember(MemberFormDto memberFormDto) {
+        String password = passwordEncoder.encode(memberFormDto.getPassword());
 
         return Member.builder()
                 .name(memberFormDto.getName())
@@ -93,12 +71,18 @@ public class Member extends BaseEntity {
                 .address(memberFormDto.getAddress())
                 .password(memberFormDto.getPassword())
                 .memberRole(MemberRole.ADMIN)
+                .password(password)
                 .phoneNumber(PhoneNumber.create(memberFormDto.getPhoneNum1(), memberFormDto.getPhoneNum2(), memberFormDto.getPhoneNum3()))
-                .picture(memberFormDto.getPicture())
                 .build();
     }
 
-    public String getRoleKey(){
-        return this.memberRole.name();
+    public static Member from(MemberFormDto memberFormDto){
+
+        return Member.builder()
+                .name(memberFormDto.getName())
+                .email(memberFormDto.getEmail())
+                .password(memberFormDto.getPassword())
+                .address(memberFormDto.getAddress())
+                .build();
     }
 }
