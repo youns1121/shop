@@ -20,9 +20,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MemberService memberService;
-
-    private final CustomOAuth2UserService customOAuth2UserService;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
